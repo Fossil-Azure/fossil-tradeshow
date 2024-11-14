@@ -4,7 +4,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { LayoutComponent } from './layout/layout.component';
 
 export const routes: Routes = [
-  { path: '', component: LoginPageComponent },
+  { path: 'login', component: LoginPageComponent },
   {
     path: '',
     component: LayoutComponent,
@@ -14,7 +14,7 @@ export const routes: Routes = [
     ]
   },
   // Redirect any unknown paths
-  { path: '**', redirectTo: 'home' }
+  { path: '**', redirectTo: 'login' }
 ];
 
 export const AppRoutes = RouterModule.forRoot(routes);
