@@ -1,0 +1,22 @@
+<img src="assets/Banner.jpg" alt="Tradeshow Banner" class="banner">
+
+<div class="input-group">
+    <mat-form-field class="form-control" appearance="outline">
+        <mat-label>Enter SKU or Scan QR code</mat-label>
+        <input matInput type="text" [(ngModel)]="inputText">
+        <button *ngIf="inputText" matSuffix mat-icon-button aria-label="Clear" (click)="inputText=''">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+    <button mat-icon-button class="qr-button" (click)="openScanner()" aria-label="Scan QR code">
+        <mat-icon inline="true" class="full-size-icon">qr_code_scanner</mat-icon>
+    </button>
+</div>
+
+<!-- QR Code Scanner Modal -->
+<div *ngIf="showScanner" class="scanner-modal">
+    <zxing-scanner [enable]="true" (camerasFound)="onCamerasFound($event)" (scanSuccess)="handleQrCodeResult($event)"
+        [tryHarder]="true">
+    </zxing-scanner>
+    <button (click)="closeScanner()" class="close-button">Close</button>
+</div>

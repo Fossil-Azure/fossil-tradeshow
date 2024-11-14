@@ -1,0 +1,41 @@
+<div class="app-container">
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <img src="assets/fossil_logo.png" alt="Fossil Group" class="company-logo">
+        </div>
+        <div class="header-icons">
+            <mat-icon>shopping_cart</mat-icon>
+            <!-- Menu icon for small screens -->
+            <mat-icon *ngIf="isMobile" class="menu-icon" (click)="toggleMobileMenu()">menu</mat-icon>
+        </div>
+    </div>
+
+    <!-- Main container with sidenav and content side by side -->
+    <div class="main-container">
+        <!-- Sidebar Navigation Menu (hidden on small screens) -->
+        <div class="sidenav" *ngIf="!isMobile" [class.expanded]="isExpanded" (mouseenter)="expand()"
+            (mouseleave)="collapse()">
+            <div class="menu-item" *ngFor="let item of menuItems">
+                <mat-icon>{{ item.icon }}</mat-icon>
+                <span class="menu-text" *ngIf="isExpanded">{{ item.name }}</span>
+            </div>
+        </div>
+
+        <!-- Content Area for Nested Components -->
+        <div class="content">
+            <router-outlet></router-outlet> <!-- Render child routes here -->
+        </div>
+    </div>
+
+    <!-- Mobile Menu Overlay (visible on small screens when menu icon is clicked) -->
+    <div class="mobile-menu-overlay" *ngIf="showMobileMenu && isMobile">
+        <div class="mobile-menu">
+            <div class="menu-item" *ngFor="let item of menuItems">
+                <mat-icon>{{ item.icon }}</mat-icon>
+                <span class="menu-text">{{ item.name }}</span>
+            </div>
+            <button mat-button class="close-button" (click)="toggleMobileMenu()">Close</button>
+        </div>
+    </div>
+</div>

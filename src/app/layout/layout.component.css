@@ -1,0 +1,157 @@
+/* Root styles to prevent scrolling */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+/* Wrapper for header and sidenav to fit within viewport */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Header styling */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #ffffff;
+    color: black;
+    width: 100%;
+    height: 60px;
+    box-sizing: border-box;
+    box-shadow: inset 0px -5px 2px rgba(0, 0, 0, 0.08);
+}
+
+.header .logo img {
+    max-height: 40px;
+}
+
+/* Header icons */
+.header-icons mat-icon {
+    font-size: 24px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+/* Main container with sidenav and content side by side */
+.main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Sidenav styles for large screens */
+.sidenav {
+    width: 60px;
+    transition: width 0.3s;
+    overflow: hidden;
+    background-color: #ffffff;
+    color: black;
+    height: calc(100vh - 60px);
+    /* Full height minus header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    box-shadow: inset -5px 0px 2px rgba(0, 0, 0, 0.08);
+}
+
+.sidenav.expanded {
+    width: 150px;
+    align-items: flex-start;
+}
+
+/* Hide sidenav on small screens */
+@media (max-width: 768px) {
+    .sidenav {
+        display: none;
+    }
+
+    .menu-icon {
+        display: inline-block;
+    }
+}
+
+/* Content area styling */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #fff;
+    color: #000;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.mobile-menu {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 300px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    justify-content: center;
+}
+
+.sidenav.expanded .menu-item {
+    justify-content: flex-start;
+}
+
+.menu-item:hover {
+    background: linear-gradient(135deg, #c68ffa, #79bcff);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.menu-item mat-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.close-button {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.menu-text {
+    font-size: 16px;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.company-logo {
+    max-width: 100px;
+    display: block;
+    margin: 0 auto;
+    mix-blend-mode: multiply;
+}
