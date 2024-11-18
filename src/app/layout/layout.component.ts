@@ -41,5 +41,6 @@ export class LayoutComponent {
 
   toggleMobileMenu() {
     this.showMobileMenu = !this.showMobileMenu;
+    this.isExpanded = this.showMobileMenu; // Expand when the menu is shown
   }
 }
