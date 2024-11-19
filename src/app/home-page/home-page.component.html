@@ -1,17 +1,94 @@
-<img src="assets/Banner.jpg" alt="Tradeshow Banner" class="banner">
+<body>
+    <div class="imageDiv">
+        <img src="assets/Banner.jpg" alt="Tradeshow Banner" class="banner">
+    </div>
 
-<div class="input-group">
-    <mat-form-field class="form-control" appearance="outline">
-        <mat-label>Enter SKU or Scan QR code</mat-label>
-        <input matInput type="text" [(ngModel)]="inputText">
-        <button *ngIf="inputText" matSuffix mat-icon-button aria-label="Clear" (click)="inputText=''">
-            <mat-icon>close</mat-icon>
+    <div class="input-group">
+        <mat-form-field class="form-control" appearance="outline">
+            <mat-label>Enter SKU or Scan QR code</mat-label>
+            <input matInput type="text" [(ngModel)]="inputText" (keyup.enter)="performAction()" />
+            <!-- Search Button -->
+            <button *ngIf="inputText" matSuffix mat-icon-button aria-label="Search" (click)="performAction()">
+                <mat-icon>search</mat-icon>
+            </button>
+            <!-- Clear Button -->
+            <button *ngIf="inputText" matSuffix mat-icon-button aria-label="Clear" (click)="clearInput()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </mat-form-field>
+        <!-- QR Code Button -->
+        <button mat-icon-button class="qr-button" (click)="openScanner()" aria-label="Scan QR code">
+            <mat-icon inline="true" class="full-size-icon">qr_code_scanner</mat-icon>
         </button>
-    </mat-form-field>
-    <button mat-icon-button class="qr-button" (click)="openScanner()" aria-label="Scan QR code">
-        <mat-icon inline="true" class="full-size-icon">qr_code_scanner</mat-icon>
-    </button>
-</div>
+    </div>
+
+    <div class="product-card">
+        <!-- Product Image Section -->
+        <div class="product-image">
+            <img src="assets/Watch.jpg" alt="Product Image" />
+            <!-- Rating Section -->
+            <div class="product-rating">
+                <div class="stars">
+                    <mat-icon *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" (click)="setRating(i + 1)"
+                        (mouseover)="hoverRating(i + 1)" (mouseleave)="hoverRating(0)"
+                        [class.filled]="i + 1 <= (hoveredRating || userRating)">
+                        star
+                    </mat-icon>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <div class="detail-row">
+                <mat-form-field appearance="outline" class="detail-field">
+                    <mat-label>Product Title</mat-label>
+                    <input matInput type="text" [(ngModel)]="productTitle" placeholder="Sample Product" />
+                </mat-form-field>
+            </div>
+            <div class="detail-row">
+                <mat-form-field appearance="outline" class="detail-field">
+                    <mat-label>Brand</mat-label>
+                    <input matInput type="text" [(ngModel)]="brandName" placeholder="Brand Name" />
+                </mat-form-field>
+            </div>
+            <div class="detail-row">
+                <mat-form-field appearance="outline" class="detail-field">
+                    <mat-label>Season</mat-label>
+                    <input matInput type="text" [(ngModel)]="season" placeholder="Summer 2024" />
+                </mat-form-field>
+            </div>
+            <div class="detail-row">
+                <mat-form-field appearance="outline" class="detail-field">
+                    <mat-label>Platform</mat-label>
+                    <input matInput type="text" [(ngModel)]="platform" placeholder="E-commerce" />
+                </mat-form-field>
+            </div>
+            <div class="detail-row">
+                <mat-form-field appearance="outline" class="detail-field">
+                    <mat-label>MSRP / MRP</mat-label>
+                    <input matInput type="text" [(ngModel)]="msrp" placeholder="$150.00" />
+                </mat-form-field>
+            </div>
+            <div class="detail-row">
+                <mat-form-field appearance="outline" class="detail-field">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput type="number" [(ngModel)]="quantity" min="1" value="1" />
+                </mat-form-field>
+            </div>
+            <div class="detail-row">
+                <mat-form-field appearance="outline" class="detail-field">
+                    <mat-label>Sub Total</mat-label>
+                    <input matInput type="text" [(ngModel)]="subTotal" placeholder="$150.00" />
+                </mat-form-field>
+            </div>
+            <!-- Add to Cart Button -->
+            <div class="detail-row" style="display: flex; justify-content: center; align-items: center;">
+                <button mat-raised-button color="primary" class="cartButton">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+</body>
 
 <!-- QR Code Scanner Modal -->
 <div *ngIf="showScanner" class="scanner-modal">

@@ -1,5 +1,16 @@
+body {
+    display: flex;
+    flex-direction: column;
+    /* height: 80vh; */
+    /* Full viewport height */
+    margin: 0;
+    overflow: hidden;
+    /* Prevent scrollbar */
+}
+
 .banner {
     width: 100%;
+    /* height: 20vh; */
     margin-bottom: 15px;
 }
 
@@ -38,7 +49,7 @@
 .qr-button {
     font-size: 50px;
     /* This font size will influence the icon size */
-    width: 66px;
+    width: 56px;
     height: 56px;
     display: flex;
     align-items: center;
@@ -61,4 +72,225 @@
     /* Set explicit height */
     line-height: 46px;
     /* Center icon vertically */
+}
+
+.product-card {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    /* gap: 20px; */
+    align-items: center;
+    /* margin: 20px 0; */
+}
+
+.product-image {
+    text-align: center;
+}
+
+.product-image img {
+    height: 300px;
+    width: 300px;
+}
+
+.product-rating {
+    margin-top: 10px;
+    /* Add spacing between the image and stars */
+}
+
+.detail-field {
+    width: 100%;
+}
+
+.product-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.stars mat-icon {
+    font-size: 24px;
+    /* Set size for the stars */
+    color: #d3d3d3;
+    /* Default star color */
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.stars mat-icon.filled {
+    color: #ffc107;
+    /* Gold color for filled stars */
+}
+
+.stars mat-icon:hover {
+    transform: scale(1.2);
+    /* Slight scaling effect on hover */
+}
+
+.add-to-cart {
+    grid-column: span 2;
+    text-align: right;
+}
+
+.cartButton {
+    position: relative;
+    /* Required for pseudo-elements */
+    overflow: hidden;
+    /* Confine effects within button boundaries */
+    background: linear-gradient(135deg, #f5c518, #ffc107);
+    /* Yellow gradient */
+    color: #000000 !important;
+    font-size: large;
+    padding: 12px 24px;
+    border-radius: 25px;
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 2px 20px rgba(255, 193, 7, 0.5);
+    cursor: pointer;
+    text-align: center;
+}
+
+.cartButton:hover {
+    background: linear-gradient(135deg, #ffc107, #f5c518);
+    /* Reverse the gradient on hover */
+    box-shadow: 0 6px 15px rgba(255, 193, 7, 0.5), 0 4px 30px rgba(255, 193, 7, 0.2);
+    transform: translateY(-3px);
+}
+
+.cartButton:active {
+    transform: translateY(2px);
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+}
+
+.cartButton::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 60%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.cartButton:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+}
+
+.cartButton::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.cartButton:active::after {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.2;
+}
+
+/* Mobile styles using media queries */
+@media (max-width: 768px) {
+
+    /* Center-align the content */
+    .imageDiv {
+        text-align: center;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px auto;
+        width: 90%;
+        /* Take full width */
+    }
+
+    .qr-button {
+        font-size: 20px;
+        /* Resize QR button */
+        width: 40px;
+        height: 40px;
+    }
+
+    .product-card {
+        display: flex;
+        flex-direction: column;
+        /* Stack image and details */
+        align-items: center;
+        gap: 10px;
+        margin: 20px auto;
+        width: 90%;
+    }
+
+    .product-image {
+        width: 60%;
+        /* Adjust image size */
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .product-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        /* Two columns for labels and inputs */
+        gap: 10px;
+        width: 100%;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .detail-field {
+        width: 100%;
+    }
+
+    .product-rating {
+        margin: 10px auto;
+        text-align: center;
+    }
+
+    .cartButton {
+        width: 100%;
+        /* Full-width for the button */
+        font-size: 18px;
+        font-weight: bold;
+        padding: 12px;
+        margin-top: 20px;
+        background: linear-gradient(135deg, #f5c518, #ffc107);
+        border: none;
+        color: #000;
+        border-radius: 25px;
+        text-align: center;
+    }
+}
+
+/* Heading adjustment for mobile */
+.product-card h1 {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 10px;
 }
