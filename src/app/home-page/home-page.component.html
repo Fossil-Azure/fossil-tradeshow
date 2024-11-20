@@ -43,60 +43,44 @@
             <div class="details-grid">
                 <!-- Row 1 -->
                 <div class="grid-item" style="grid-column: span 2;">
-                    <mat-form-field appearance="outline" class="detail-field">
-                        <mat-label>Product Title</mat-label>
-                        <input matInput type="text" [(ngModel)]="productTitle" placeholder="Sample Product" />
-                    </mat-form-field>
+                    <label class="desktop-label">Product Title</label>
+                    <input class="desktop-input" type="text" [(ngModel)]="productTitle" placeholder="Product Title">
                 </div>
                 <div class="grid-item">
-                    <mat-form-field appearance="outline" class="detail-field">
-                        <mat-label>Brand</mat-label>
-                        <input matInput type="text" [(ngModel)]="brandName" placeholder="Brand Name" />
-                    </mat-form-field>
+                    <label class="desktop-label">Brand</label>
+                    <input class="desktop-input" type="text" [(ngModel)]="brandName" placeholder="Brand Name">
                 </div>
 
                 <!-- Row 2 -->
                 <div class="grid-item">
-                    <mat-form-field appearance="outline" class="detail-field">
-                        <mat-label>Season</mat-label>
-                        <input matInput type="text" [(ngModel)]="season" placeholder="Summer 2024" />
-                    </mat-form-field>
+                    <label class="desktop-label">Season</label>
+                    <input class="desktop-input" type="text" [(ngModel)]="season" placeholder="Season">
                 </div>
                 <div class="grid-item" style="grid-column: span 2;">
-                    <mat-form-field appearance="outline" class="detail-field">
-                        <mat-label>Platform</mat-label>
-                        <input matInput type="text" [(ngModel)]="platform" placeholder="E-commerce" />
-                    </mat-form-field>
+                    <label class="desktop-label">Platform</label>
+                    <input class="desktop-input" type="text" [(ngModel)]="platform" placeholder="Platform">
                 </div>
 
                 <!-- Row 3 -->
                 <div class="grid-item">
-                    <mat-form-field appearance="outline" class="detail-field">
-                        <mat-label>MSRP / MRP</mat-label>
-                        <input matInput type="text" [(ngModel)]="msrp" placeholder="$150.00" />
-                        <mat-hint align="start"><strong>Retail Price in USD</strong> </mat-hint>
-                    </mat-form-field>
+                    <label class="desktop-label">MSRP / MRP</label>
+                    <input class="desktop-input" type="text" [(ngModel)]="msrp" placeholder="MSRP/ MRP">
                 </div>
                 <div class="grid-item">
-                    <mat-form-field appearance="outline" class="detail-field">
-                        <mat-label>Quantity</mat-label>
-                        <div class="quantity-wrapper">
-                            <button mat-icon-button type="button" (click)="decrement()" [disabled]="quantity <= 1">
-                                <mat-icon>remove</mat-icon>
-                            </button>
-                            <input matInput [(ngModel)]="quantity" min="1" value="1" />
-                            <button mat-icon-button type="button" (click)="increment()">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </div>
-                    </mat-form-field>
+                    <label class="desktop-label">Quantity</label>
+                    <div class="quantity-wrapper desktop-input" style="height: 35px;">
+                        <button mat-icon-button type="button" (click)="decrement()" [disabled]="quantity <= 1">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                        <input matInput [(ngModel)]="quantity" min="1" value="1" />
+                        <button mat-icon-button type="button" (click)="increment()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
                 </div>
                 <div class="grid-item">
-                    <mat-form-field appearance="outline" class="detail-field">
-                        <mat-label>Sub Total</mat-label>
-                        <input matInput type="text" [(ngModel)]="subTotal" placeholder="$150.00" />
-                        <mat-hint align="start"><strong>Retail Price in USD</strong> </mat-hint>
-                    </mat-form-field>
+                    <label class="desktop-label">Sub Total</label>
+                    <input class="desktop-input" type="text" [(ngModel)]="subTotal" placeholder="Sub Total">
                 </div>
             </div>
 
@@ -129,21 +113,21 @@
         <!-- Row 2 -->
         <div class="grid-item-mobile">
             <label>Brand</label>
-            <input type="text" placeholder="Fossil">
+            <input type="text" [(ngModel)]="brandName" placeholder="Brand">
         </div>
         <div class="grid-item-mobile">
             <label>Season</label>
-            <input type="text" placeholder="SU24">
+            <input type="text" [(ngModel)]="season" placeholder="Season">
         </div>
 
         <!-- Row 3 -->
         <div class="grid-item-mobile">
             <label>Platform</label>
-            <input type="text" placeholder="Machine">
+            <input type="text" [(ngModel)]="platform" placeholder="Platform">
         </div>
         <div class="grid-item-mobile">
             <label>MRP / MSRP</label>
-            <input type="text" placeholder="180">
+            <input type="text"[(ngModel)]="msrp" placeholder="MRP/MSRP">
         </div>
 
         <!-- Row 4 -->
@@ -161,12 +145,12 @@
         </div>
         <div class="grid-item-mobile">
             <label>Sub Total</label>
-            <input type="text" placeholder="180">
+            <input type="text" [(ngModel)]="subTotal" placeholder="Sub Total">
         </div>
 
         <!-- Row 5 -->
         <div class="grid-item-mobile cart-button" colspan="2">
-            <button class="add-to-cart">Add To Cart</button>
+            <button mat-raised-button color="primary" class="cartButton">Add to Cart</button>
         </div>
     </div>
 </body>

@@ -77,11 +77,6 @@ body {
     /* box-shadow: 4px 4px 4px 4px rgba(0, 0, 0, 0.1); */
 }
 
-.product-rating {
-    margin-top: 10px;
-    /* Add spacing between the image and stars */
-}
-
 .detail-field {
     width: 100%;
 }
@@ -112,7 +107,10 @@ body {
 }
 
 .stars mat-icon {
-    font-size: 24px;
+    box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.1);
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
     /* Set size for the stars */
     color: #d3d3d3;
     /* Default star color */
@@ -280,7 +278,7 @@ mat-form-field {
 .product-title {
     display: flex;
     align-items: center;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     padding: 10px;
     word-wrap: break-word;
@@ -307,8 +305,44 @@ mat-form-field {
     box-sizing: border-box;
 }
 
+.desktop-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.desktop-label {
+    font-size: 12px;
+    color: #666;
+}
+
 /* Responsive Adjustments */
 @media screen and (max-width: 768px) {
+    .stars mat-icon {
+        box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.1);
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        /* Set size for the stars */
+        color: #d3d3d3;
+        /* Default star color */
+        cursor: pointer;
+        transition: color 0.3s ease, transform 0.2s ease;
+    }
+    
+    .stars mat-icon.filled {
+        color: #ffc107;
+        /* Gold color for filled stars */
+    }
+    
+    .stars mat-icon:hover {
+        transform: scale(1.2);
+        /* Slight scaling effect on hover */
+    }
+
     .product-grid {
         grid-template-columns: 1fr;
         /* Single column for mobile */
@@ -340,21 +374,5 @@ mat-form-field {
         grid-column: span 2;
         /* Span across both columns */
         text-align: center;
-    }
-
-    .add-to-cart {
-        background: #ffc107;
-        color: black;
-        padding: 15px 30px;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    .add-to-cart:hover {
-        background: #f5a623;
     }
 }
