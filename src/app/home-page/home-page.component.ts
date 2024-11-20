@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 
 @Component({
@@ -26,6 +27,16 @@ export class HomePageComponent {
   quantity = 1;
   subTotal = this.msrp * this.quantity;
   hoveredRating = 0;
+  isMobile = false;
+
+  constructor(private breakpointObserver: BreakpointObserver) {
+    // Observe screen size changes using BreakpointObserver
+    this.breakpointObserver.observe([Breakpoints.Handset])
+      .subscribe(result => {
+        this.isMobile = result.matches;
+      });
+  }
+
 
   // Opens the QR scanner modal
   openScanner() {

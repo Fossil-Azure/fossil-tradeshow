@@ -11,18 +11,18 @@
             <button *ngIf="inputText" matSuffix mat-icon-button aria-label="Search" (click)="performAction()">
                 <mat-icon>search</mat-icon>
             </button>
-            <!-- Clear Button -->
-            <button *ngIf="inputText" matSuffix mat-icon-button aria-label="Clear" (click)="clearInput()">
-                <mat-icon>close</mat-icon>
-            </button>
         </mat-form-field>
         <!-- QR Code Button -->
         <button mat-icon-button class="qr-button" (click)="openScanner()" aria-label="Scan QR code">
-            <mat-icon inline="true" class="full-size-icon">qr_code_scanner</mat-icon>
+            <mat-icon inline="true">qr_code_scanner</mat-icon>
+        </button>
+        <!-- Clear Button -->
+        <button mat-icon-button aria-label="Clear" class="qr-button" (click)="clearInput()">
+            <mat-icon inline="true">cancel</mat-icon>
         </button>
     </div>
 
-    <div class="product-card">
+    <div *ngIf="!isMobile" class="product-card">
         <!-- Product Image Section -->
         <div class="product-image">
             <img src="assets/Watch.jpg" alt="Product Image" />
@@ -38,7 +38,8 @@
             </div>
         </div>
 
-        <div class="product-details">
+        <!-- Desktop Layout -->
+        <div *ngIf="!isMobile" class="product-details">
             <div class="details-grid">
                 <!-- Row 1 -->
                 <div class="grid-item" style="grid-column: span 2;">
@@ -103,6 +104,69 @@
             <div class="cart-button">
                 <button mat-raised-button color="primary" class="cartButton">Add to Cart</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Mobile Layout -->
+    <div *ngIf="isMobile" class="product-grid">
+        <!-- Row 1 -->
+        <div class="grid-item-mobile image-rating">
+            <img src="assets/Watch.jpg" alt="Product Image" class="product-image-mobile">
+            <div class="product-rating-mobile">
+                <div class="stars">
+                    <mat-icon *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" (click)="setRating(i + 1)"
+                        (mouseover)="hoverRating(i + 1)" (mouseleave)="hoverRating(0)"
+                        [class.filled]="i + 1 <= (hoveredRating || userRating)">
+                        star
+                    </mat-icon>
+                </div>
+            </div>
+        </div>
+        <div class="grid-item-mobile product-title">
+            <div>Machine Chronograph Smoke Stainless Steel Watch</div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="grid-item-mobile">
+            <label>Brand</label>
+            <input type="text" placeholder="Fossil">
+        </div>
+        <div class="grid-item-mobile">
+            <label>Season</label>
+            <input type="text" placeholder="SU24">
+        </div>
+
+        <!-- Row 3 -->
+        <div class="grid-item-mobile">
+            <label>Platform</label>
+            <input type="text" placeholder="Machine">
+        </div>
+        <div class="grid-item-mobile">
+            <label>MRP / MSRP</label>
+            <input type="text" placeholder="180">
+        </div>
+
+        <!-- Row 4 -->
+        <div class="grid-item-mobile quantity">
+            <label>Quantity</label>
+            <div class="quantity-wrapper">
+                <button mat-icon-button type="button" (click)="decrement()" [disabled]="quantity <= 1">
+                    <mat-icon>remove</mat-icon>
+                </button>
+                <input matInput [(ngModel)]="quantity" min="1" value="1" />
+                <button mat-icon-button type="button" (click)="increment()">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="grid-item-mobile">
+            <label>Sub Total</label>
+            <input type="text" placeholder="180">
+        </div>
+
+        <!-- Row 5 -->
+        <div class="grid-item-mobile cart-button" colspan="2">
+            <button class="add-to-cart">Add To Cart</button>
         </div>
     </div>
 </body>
