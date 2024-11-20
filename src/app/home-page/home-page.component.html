@@ -127,7 +127,7 @@
         </div>
         <div class="grid-item-mobile">
             <label>MRP / MSRP</label>
-            <input type="text"[(ngModel)]="msrp" placeholder="MRP/MSRP">
+            <input type="text" [(ngModel)]="msrp" placeholder="MRP/MSRP">
         </div>
 
         <!-- Row 4 -->
@@ -157,7 +157,7 @@
 
 <!-- QR Code Scanner Modal -->
 <div *ngIf="showScanner" class="scanner-modal">
-    <zxing-scanner [enable]="true" (camerasFound)="onCamerasFound($event)" (scanSuccess)="handleQrCodeResult($event)"
+    <zxing-scanner [enable]="true" [formats]="allowedFormats" (camerasFound)="onCamerasFound($event)" (scanSuccess)="handleQrCodeResult($event)"
         [tryHarder]="true">
     </zxing-scanner>
     <button (click)="closeScanner()" class="close-button">Close</button>

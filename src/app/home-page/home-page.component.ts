@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
+import { BarcodeFormat } from '@zxing/library';
 
 @Component({
   selector: 'app-home-page',
@@ -28,6 +29,7 @@ export class HomePageComponent {
   subTotal = this.msrp * this.quantity;
   hoveredRating = 0;
   isMobile = false;
+  allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128];
 
   constructor(private breakpointObserver: BreakpointObserver) {
     // Observe screen size changes using BreakpointObserver
