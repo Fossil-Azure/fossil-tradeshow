@@ -38,52 +38,69 @@
             </div>
         </div>
 
-        <!-- Product Details Section -->
         <div class="product-details">
-            <div class="detail-row">
-                <mat-form-field appearance="outline" class="detail-field">
-                    <mat-label>Product Title</mat-label>
-                    <input matInput type="text" [(ngModel)]="productTitle" placeholder="Sample Product" />
-                </mat-form-field>
+            <div class="details-grid">
+                <!-- Row 1 -->
+                <div class="grid-item" style="grid-column: span 2;">
+                    <mat-form-field appearance="outline" class="detail-field">
+                        <mat-label>Product Title</mat-label>
+                        <input matInput type="text" [(ngModel)]="productTitle" placeholder="Sample Product" />
+                    </mat-form-field>
+                </div>
+                <div class="grid-item">
+                    <mat-form-field appearance="outline" class="detail-field">
+                        <mat-label>Brand</mat-label>
+                        <input matInput type="text" [(ngModel)]="brandName" placeholder="Brand Name" />
+                    </mat-form-field>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="grid-item">
+                    <mat-form-field appearance="outline" class="detail-field">
+                        <mat-label>Season</mat-label>
+                        <input matInput type="text" [(ngModel)]="season" placeholder="Summer 2024" />
+                    </mat-form-field>
+                </div>
+                <div class="grid-item" style="grid-column: span 2;">
+                    <mat-form-field appearance="outline" class="detail-field">
+                        <mat-label>Platform</mat-label>
+                        <input matInput type="text" [(ngModel)]="platform" placeholder="E-commerce" />
+                    </mat-form-field>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="grid-item">
+                    <mat-form-field appearance="outline" class="detail-field">
+                        <mat-label>MSRP / MRP</mat-label>
+                        <input matInput type="text" [(ngModel)]="msrp" placeholder="$150.00" />
+                        <mat-hint align="start"><strong>Retail Price in USD</strong> </mat-hint>
+                    </mat-form-field>
+                </div>
+                <div class="grid-item">
+                    <mat-form-field appearance="outline" class="detail-field">
+                        <mat-label>Quantity</mat-label>
+                        <div class="quantity-wrapper">
+                            <button mat-icon-button type="button" (click)="decrement()" [disabled]="quantity <= 1">
+                                <mat-icon>remove</mat-icon>
+                            </button>
+                            <input matInput [(ngModel)]="quantity" min="1" value="1" />
+                            <button mat-icon-button type="button" (click)="increment()">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </div>
+                    </mat-form-field>
+                </div>
+                <div class="grid-item">
+                    <mat-form-field appearance="outline" class="detail-field">
+                        <mat-label>Sub Total</mat-label>
+                        <input matInput type="text" [(ngModel)]="subTotal" placeholder="$150.00" />
+                        <mat-hint align="start"><strong>Retail Price in USD</strong> </mat-hint>
+                    </mat-form-field>
+                </div>
             </div>
-            <div class="detail-row">
-                <mat-form-field appearance="outline" class="detail-field">
-                    <mat-label>Brand</mat-label>
-                    <input matInput type="text" [(ngModel)]="brandName" placeholder="Brand Name" />
-                </mat-form-field>
-            </div>
-            <div class="detail-row">
-                <mat-form-field appearance="outline" class="detail-field">
-                    <mat-label>Season</mat-label>
-                    <input matInput type="text" [(ngModel)]="season" placeholder="Summer 2024" />
-                </mat-form-field>
-            </div>
-            <div class="detail-row">
-                <mat-form-field appearance="outline" class="detail-field">
-                    <mat-label>Platform</mat-label>
-                    <input matInput type="text" [(ngModel)]="platform" placeholder="E-commerce" />
-                </mat-form-field>
-            </div>
-            <div class="detail-row">
-                <mat-form-field appearance="outline" class="detail-field">
-                    <mat-label>MSRP / MRP</mat-label>
-                    <input matInput type="text" [(ngModel)]="msrp" placeholder="$150.00" />
-                </mat-form-field>
-            </div>
-            <div class="detail-row">
-                <mat-form-field appearance="outline" class="detail-field">
-                    <mat-label>Quantity</mat-label>
-                    <input matInput type="number" [(ngModel)]="quantity" min="1" value="1" />
-                </mat-form-field>
-            </div>
-            <div class="detail-row">
-                <mat-form-field appearance="outline" class="detail-field">
-                    <mat-label>Sub Total</mat-label>
-                    <input matInput type="text" [(ngModel)]="subTotal" placeholder="$150.00" />
-                </mat-form-field>
-            </div>
+
             <!-- Add to Cart Button -->
-            <div class="detail-row" style="display: flex; justify-content: center; align-items: center;">
+            <div class="cart-button">
                 <button mat-raised-button color="primary" class="cartButton">Add to Cart</button>
             </div>
         </div>

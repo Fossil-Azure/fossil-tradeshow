@@ -1,8 +1,6 @@
 body {
     display: flex;
     flex-direction: column;
-    /* height: 80vh; */
-    /* Full viewport height */
     margin: 0;
     overflow: hidden;
     /* Prevent scrollbar */
@@ -10,7 +8,6 @@ body {
 
 .banner {
     width: 100%;
-    /* height: 20vh; */
     margin-bottom: 15px;
 }
 
@@ -77,9 +74,7 @@ body {
 .product-card {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    /* gap: 20px; */
     align-items: center;
-    /* margin: 20px 0; */
 }
 
 .product-image {
@@ -101,14 +96,24 @@ body {
 }
 
 .product-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* margin: 20px; */
 }
 
-.detail-row {
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 20px;
+    row-gap: 10px;
+    width: 100%;
+    /* max-width: 800px; */
+}
+
+.grid-item {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
 .stars mat-icon {
@@ -130,9 +135,11 @@ body {
     /* Slight scaling effect on hover */
 }
 
-.add-to-cart {
-    grid-column: span 2;
-    text-align: right;
+.cart-button {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .cartButton {
@@ -140,9 +147,10 @@ body {
     /* Required for pseudo-elements */
     overflow: hidden;
     /* Confine effects within button boundaries */
-    background: linear-gradient(135deg, #f5c518, #ffc107);
+    background: linear-gradient(135deg, #f5c518, #ffbf00);
     /* Yellow gradient */
     color: #000000 !important;
+    width: 100%;
     font-size: large;
     padding: 12px 24px;
     border-radius: 25px;
@@ -202,95 +210,140 @@ body {
     opacity: 0.2;
 }
 
-/* Mobile styles using media queries */
-@media (max-width: 768px) {
-
-    /* Center-align the content */
-    .imageDiv {
-        text-align: center;
-    }
-
-    .input-group {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        margin: 10px auto;
-        width: 90%;
-        /* Take full width */
-    }
-
-    .qr-button {
-        font-size: 20px;
-        /* Resize QR button */
-        width: 40px;
-        height: 40px;
-    }
-
-    .product-card {
-        display: flex;
-        flex-direction: column;
-        /* Stack image and details */
-        align-items: center;
-        gap: 10px;
-        margin: 20px auto;
-        width: 90%;
-    }
-
-    .product-image {
-        width: 60%;
-        /* Adjust image size */
-        height: auto;
-        margin: 0 auto;
-    }
-
-    .product-image img {
-        width: 100%;
-        height: auto;
-    }
-
-    .product-details {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        /* Two columns for labels and inputs */
-        gap: 10px;
-        width: 100%;
-    }
-
-    .detail-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-    }
-
-    .detail-field {
-        width: 100%;
-    }
-
-    .product-rating {
-        margin: 10px auto;
-        text-align: center;
-    }
-
-    .cartButton {
-        width: 100%;
-        /* Full-width for the button */
-        font-size: 18px;
-        font-weight: bold;
-        padding: 12px;
-        margin-top: 20px;
-        background: linear-gradient(135deg, #f5c518, #ffc107);
-        border: none;
-        color: #000;
-        border-radius: 25px;
-        text-align: center;
-    }
-}
-
 /* Heading adjustment for mobile */
 .product-card h1 {
     font-size: 24px;
     text-align: center;
     margin-top: 10px;
+}
+
+.quantity-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24px;
+    /* Set height constraint */
+}
+
+.quantity-wrapper input {
+    text-align: center;
+    width: 40px;
+    /* Adjust the width for the input */
+    height: 100%;
+    /* Match the input height to the wrapper height */
+    border: none;
+    outline: none;
+    font-size: 14px;
+    /* Adjust text size for better visibility */
+    line-height: 24px;
+    /* Match line-height for centering text */
+}
+
+.quantity-wrapper button {
+    min-width: 24px;
+    /* Match button width to height constraint */
+    height: 24px;
+    /* Ensure buttons match the height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+/* Mobile Styles */
+@media screen and (max-width: 768px) {
+
+    /* Body */
+    body {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        overflow: auto;
+        /* Allow scrolling for mobile */
+    }
+
+    /* Banner */
+    .banner {
+        width: 100%;
+        max-width: 100%;
+        /* Full width for mobile */
+        margin-bottom: 10px;
+        /* Reduce spacing for mobile */
+    }
+
+    /* Scanner Modal */
+    .scanner-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        /* Darker background for mobile */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Product Card */
+    .product-card {
+        display: flex;
+        flex-direction: column;
+        /* Stack content vertically */
+        gap: 16px;
+        padding: 8px;
+        /* Reduce padding for mobile */
+    }
+
+    /* Product Image */
+    .product-image img {
+        height: 150px;
+        /* Smaller image for mobile */
+        width: 150px;
+    }
+
+    /* Product Rating */
+    .product-rating {
+        margin-top: 5px;
+        /* Reduce spacing */
+    }
+
+    /* Details Grid */
+    .details-grid {
+        grid-template-columns: 1fr;
+        /* Single-column layout */
+        gap: 12px;
+        /* Adjust gaps for mobile */
+    }
+
+    /* Quantity Wrapper */
+    .quantity-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 24px;
+        /* Keep height consistent */
+    }
+
+    /* Cart Button */
+    .cart-button {
+        margin-top: 20px;
+        /* Adjust spacing for mobile */
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        /* Full width */
+    }
+
+    .cartButton {
+        width: 100%;
+        /* Stretch button to full width */
+        padding: 12px;
+        border-radius: 8px;
+        /* Smaller border radius for mobile */
+    }
 }

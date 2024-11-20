@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class HomePageComponent {
 
-  inputText: string = '';
+  inputText: string = 'FS4662';
   showScanner: boolean = false;
   availableDevices: MediaDeviceInfo[] = [];
   selectedDevice: MediaDeviceInfo | null = null;
@@ -18,13 +18,13 @@ export class HomePageComponent {
   productQuantity: number = 1;
   stars: number[] = [1, 2, 3, 4, 5];
   userRating: number = 0;
-  productTitle: any;
-  brandName: any;
-  season: any;
-  platform: any;
-  msrp: any;
-  quantity: any;
-  subTotal: any;
+  productTitle = 'Machine Chronograph Smoke Stainless Steel Watch';
+  brandName = "Fossil";
+  season = "SU24";
+  platform = "Machine";
+  msrp = 180;
+  quantity = 1;
+  subTotal = this.msrp * this.quantity;
   hoveredRating = 0;
 
   // Opens the QR scanner modal
@@ -67,13 +67,15 @@ export class HomePageComponent {
     }
   }
 
-  increaseQuantity(): void {
-    this.productQuantity++;
+  increment(): void {
+    this.quantity++;
+    this.subTotal = this.quantity * this.msrp;
   }
 
-  decreaseQuantity(): void {
-    if (this.productQuantity > 1) {
-      this.productQuantity--;
+  decrement(): void {
+    if (this.quantity > 1) {
+      this.quantity--;
+      this.subTotal = this.quantity * this.msrp;
     }
   }
 
