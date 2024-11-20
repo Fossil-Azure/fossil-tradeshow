@@ -323,17 +323,14 @@ mat-form-field {
     .quantity-wrapper {
         display: flex;
         align-items: center;
+        height: 32px;
     }
 
     .quantity-wrapper button {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: white;
         cursor: pointer;
     }
 
     .quantity-wrapper input {
-        /* width: 50px; */
         text-align: center;
         font-size: 14px;
     }
