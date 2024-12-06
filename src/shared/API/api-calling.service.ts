@@ -11,7 +11,7 @@ export class ApiCallingService {
 
   // private baseUrl = "http://localhost:8080";
 
-  private baseUrl = 'https:tradeshow-fossil.azurewebsites.net';
+  private baseUrl = 'https://tradeshow-fossil.azurewebsites.net';
 
   private loginUrl = `${this.baseUrl}/api/auth/login`;
 
