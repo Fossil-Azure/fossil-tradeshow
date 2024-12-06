@@ -9,7 +9,7 @@ import { BarcodeFormat } from '@zxing/library';
 })
 export class HomePageComponent {
 
-  inputText: string = 'FS4662';
+  skuCode: string = 'FS4662';
   showScanner: boolean = false;
   availableDevices: MediaDeviceInfo[] = [];
   selectedDevice: MediaDeviceInfo | null = null;
@@ -39,7 +39,6 @@ export class HomePageComponent {
       });
   }
 
-
   // Opens the QR scanner modal
   openScanner() {
     this.showScanner = true;
@@ -52,7 +51,7 @@ export class HomePageComponent {
 
   // Handle QR code result
   handleQrCodeResult(result: string) {
-    this.inputText = result;  // Fill the input field with scanned text
+    this.skuCode = result;  // Fill the input field with scanned text
     this.closeScanner();
   }
 
@@ -66,14 +65,14 @@ export class HomePageComponent {
 
   // Clear the input field
   clearInput(): void {
-    this.inputText = '';
+    this.skuCode = '';
     console.log('Input cleared');
   }
 
   // Action to perform when text is entered or QR is scanned
   performAction(): void {
-    if (this.inputText) {
-      console.log('Performing action with:', this.inputText);
+    if (this.skuCode) {
+      console.log('Performing action with:', this.skuCode);
       // Add your custom logic here
     } else {
       console.log('No input to perform the action with.');

@@ -5,10 +5,9 @@
 
     <div class="input-group">
         <mat-form-field class="form-control" appearance="outline">
-            <mat-label>Enter SKU or Scan QR code</mat-label>
-            <input matInput type="text" [(ngModel)]="inputText" (keyup.enter)="performAction()" />
-            <!-- Search Button -->
-            <button *ngIf="inputText" matSuffix mat-icon-button aria-label="Search" (click)="performAction()">
+            <mat-label>Enter SKU or Scan QR/ Barcode</mat-label>
+            <input matInput type="text" [(ngModel)]="skuCode" (keyup.enter)="performAction()" />
+            <button *ngIf="skuCode" matSuffix mat-icon-button aria-label="Search" (click)="performAction()">
                 <mat-icon>search</mat-icon>
             </button>
         </mat-form-field>
@@ -86,7 +85,8 @@
 
             <!-- Add to Cart Button -->
             <div class="cart-button">
-                <button mat-raised-button color="primary" class="cartButton">Add to Cart</button>
+                <button mat-raised-button color="primary" class="cartButton">
+                    <mat-icon>shopping_cart</mat-icon>Add to Cart</button>
             </div>
         </div>
     </div>
@@ -150,15 +150,16 @@
 
         <!-- Row 5 -->
         <div class="grid-item-mobile cart-button" colspan="2">
-            <button mat-raised-button color="primary" class="cartButton">Add to Cart</button>
+            <button mat-raised-button color="primary" class="cartButton">
+                <mat-icon>shopping_cart</mat-icon>Add to Cart</button>
         </div>
     </div>
 </body>
 
 <!-- QR Code Scanner Modal -->
 <div *ngIf="showScanner" class="scanner-modal">
-    <zxing-scanner [enable]="true" [formats]="allowedFormats" (camerasFound)="onCamerasFound($event)" (scanSuccess)="handleQrCodeResult($event)"
-        [tryHarder]="true">
+    <zxing-scanner [enable]="true" [formats]="allowedFormats" (camerasFound)="onCamerasFound($event)"
+        (scanSuccess)="handleQrCodeResult($event)" [tryHarder]="true">
     </zxing-scanner>
     <button (click)="closeScanner()" class="close-button">Close</button>
 </div>

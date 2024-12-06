@@ -222,4 +222,5 @@ body {
     display: block;
     margin: 0 auto;
     mix-blend-mode: multiply;
+    cursor: pointer;
 }

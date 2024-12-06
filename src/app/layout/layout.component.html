@@ -4,9 +4,9 @@
         <!-- Menu icon for small screens -->
         <mat-icon *ngIf="isMobile" class="menu-icon" (click)="toggleMobileMenu()">menu</mat-icon>
         <div class="logo">
-            <img src="assets/fossil_logo.png" alt="Fossil Group" class="company-logo">
+            <img (click)="navigateTo('/tradeshow/home')" src="assets/fossil_logo.png" alt="Fossil Group" class="company-logo">
         </div>
-        <div class="header-icons">
+        <div class="header-icons" (click)="redirectToCart()">
             <mat-icon>shopping_cart</mat-icon>
         </div>
     </div>
@@ -16,7 +16,7 @@
         <!-- Sidebar Navigation Menu -->
         <div class="sidenav" [class.expanded]="isExpanded" *ngIf="!isMobile || showMobileMenu" (mouseenter)="expand()"
             (mouseleave)="collapse()">
-            <div class="menu-item" *ngFor="let item of menuItems">
+            <div class="menu-item" *ngFor="let item of menuItems" (click)="navigateTo(item.route)">
                 <mat-icon>{{ item.icon }}</mat-icon>
                 <span class="menu-text" *ngIf="isExpanded">{{ item.name }}</span>
             </div>

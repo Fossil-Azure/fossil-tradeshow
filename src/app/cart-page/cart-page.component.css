@@ -1,0 +1,300 @@
+/* General Layout */
+.cart-page {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    width: 100%;
+    overflow: hidden;
+}
+
+.cart-items {
+    flex: 1;
+    max-height: calc(80vh - 30px);
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Custom Scrollbar Styles */
+.cart-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.cart-items::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.cart-items::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+.cart-items::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff;
+    border-radius: 5px;
+}
+
+.item-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.item-details {
+    flex: 1;
+    padding-left: 10px;
+}
+
+.item-details span {
+    font-size: 1rem;
+    display: inline-block;
+    /* Ensure block-level behavior for proper width control */
+    max-width: 500px;
+    /* Set a maximum width */
+    white-space: nowrap;
+    /* Prevent text wrapping */
+    overflow: hidden;
+    /* Hide overflow text */
+    text-overflow: ellipsis;
+    /* Add ellipsis for overflowing text */
+    cursor: pointer;
+    /* Indicate the text is interactive */
+}
+
+.item-details p {
+    font-size: 0.8rem;
+}
+
+.item-sku,
+.item-mrp,
+.item-brand {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.item-actions {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    font-size: 0.8rem;
+}
+
+.quantity-control button {
+    background-color: #ccc;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.quantity-control button:hover {
+    background-color: #aaa;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+    font-size: 1rem;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+.item-subtotal {
+    font-weight: bold;
+    color: #333;
+    font-size: 1rem;
+}
+
+.remove-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remove-button:hover {
+    background-color: darkred;
+}
+
+/* Order Summary Section */
+.cart-summary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    /* Gradient background */
+    color: white;
+    /* Text color */
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    /* Subtle border */
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    bottom: 0;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.2);
+    /* Shadow effect */
+    border-radius: 10px 10px 10px 10px;
+    margin-top: 15px;
+    /* Rounded corners on top */
+}
+
+.cart-summary h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    flex: 1;
+    color: #fff;
+}
+
+.cart-summary p {
+    margin: 0;
+    margin-right: 100px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.cart-summary .checkout-button {
+    background: #ffc107;
+    /* Golden color for the button */
+    color: #212529;
+    /* Dark text for contrast */
+    border: none;
+    padding: 12px 25px;
+    cursor: pointer;
+    border-radius: 50px;
+    /* Fully rounded button */
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    /* Smooth hover effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Button shadow */
+}
+
+.cart-summary .checkout-button:hover {
+    background: #ffca2c;
+    /* Lighter hover effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    /* Enhanced shadow */
+    transform: translateY(-2px);
+    /* Lift the button slightly */
+}
+
+.custom-fab {
+    background-color: rgb(239, 91, 91);
+    /* Set custom background color */
+    color: white;
+    /* Set icon/text color */
+}
+
+.custom-fab:hover {
+    background-color: rgb(255, 0, 0);
+    /* Hover effect */
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .cart-page {
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .cart-items {
+        margin-right: 0;
+        max-height: calc(100vh - 250px);
+        /* Leave space for the cart-summary */
+        overflow-y: auto;
+    }
+
+    .cart-summary {
+        flex-direction: column;
+        /* Stack elements vertically */
+        align-items: stretch;
+        /* Align elements to fill the width */
+        text-align: center;
+        /* Center-align text */
+        padding: 15px;
+        /* Reduce padding */
+    }
+
+    .cart-summary p {
+        font-size: 1rem;
+        /* Adjust font size */
+        margin: 5px 0;
+    }
+
+    .checkout-button {
+        width: 100%;
+        /* Full-width button */
+        padding: 12px;
+        /* Adjust padding */
+        font-size: 1rem;
+        /* Adjust font size */
+        margin-top: 10px;
+        /* Add spacing above the button */
+    }
+
+    .item-details span {
+        display: inline-block;
+        /* Ensures the text is treated as a block within its container */
+        max-width: 100%;
+        /* Prevents the text from exceeding the width of its container */
+        white-space: normal;
+        /* Allows the text to wrap onto the next line */
+        overflow-wrap: break-word;
+        /* Breaks long words if necessary */
+        word-wrap: break-word;
+        /* Ensures compatibility for older browsers */
+        text-overflow: ellipsis;
+        /* Adds ellipsis for overflowing text (optional) */
+        font-size: 0.8rem;
+        /* Adjust font size for better readability on smaller screens */
+    }
+
+    .checkout-button {
+        margin-top: 10px;
+    }
+
+    .quantity-control button {
+        background-color: #ccc;
+        border: none;
+        padding: 5px 8px;
+        cursor: pointer;
+        font-size: 0.8rem;
+    }
+
+    .quantity-input {
+        width: 30px;
+        text-align: center;
+        font-size: 0.8rem;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 0;
+    }
+}
