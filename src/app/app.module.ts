@@ -4,8 +4,6 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { LoginPageComponent } from './login-page/login-page.component'; // non-standalone login component
-
-// Angular Material modules
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,10 +17,11 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { JwtInterceptor } from '../shared/Interceptor/jwt.interceptor';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApiCallingService } from '../shared/API/api-calling.service';
 import { CartPageComponent } from './cart-page/cart-page.component';
+import { LoaderComponent } from './loader/loader.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export function checkToken(authService: ApiCallingService): () => void {
   return () => {
@@ -47,7 +46,8 @@ export function checkToken(authService: ApiCallingService): () => void {
     LoginPageComponent,
     HomePageComponent,
     LayoutComponent,
-    CartPageComponent
+    CartPageComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +63,8 @@ export function checkToken(authService: ApiCallingService): () => void {
     MatListModule,
     MatToolbarModule,
     ZXingScannerModule,
-    FormsModule
+    FormsModule,
+    MatSnackBarModule
   ],
   exports: [
     LoginPageComponent,

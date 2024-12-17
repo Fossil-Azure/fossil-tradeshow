@@ -3,23 +3,23 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiCallingService {
 
-  // private baseUrl = "http://localhost:8080";
-
-  private baseUrl = 'https://tradeshow-fossil.azurewebsites.net';
+  private baseUrl = "http://localhost:8080";
+  // private baseUrl = environment.apiUrl;
 
   private loginUrl = `${this.baseUrl}/api/auth/login`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
   // Send login credentials to the backend
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(this.loginUrl, { username, password });
+  login(emailId: string, password: string): Observable<any> {
+    return this.http.post(this.loginUrl, { emailId, password });
   }
 
   // Save the token in localStorage or sessionStorage

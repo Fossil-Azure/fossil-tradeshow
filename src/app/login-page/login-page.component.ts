@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ApiCallingService } from '../../shared/API/api-calling.service';
 import { Router } from '@angular/router';
+import { LoaderServiceService } from '../../shared/loader/loader-service.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-page',
@@ -13,7 +15,8 @@ export class LoginPageComponent {
   hidePassword = true; // Control the password visibility
   errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder, private api: ApiCallingService, private router: Router) {
+  constructor(private fb: FormBuilder, private api: ApiCallingService, 
+    private router: Router, private loader: LoaderServiceService, private snackBar: MatSnackBar) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -42,16 +45,23 @@ export class LoginPageComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      this.loader.show()
       const { email, password } = this.loginForm.value;
       this.api.login(email, password).subscribe({
         next: (response) => {
           // Save the token and redirect to the dashboard
           this.api.saveToken(response.token);
           this.router.navigate(['/tradeshow/home']);
+          this.loader.hide();
         },
         error: (error) => {
           // Handle login error
           this.errorMessage = 'Invalid username or password';
+          if(error.error == "Invalid credentials")
+            this.showErrorPopup('Invalid credentials. Please try again.');
+          else if(error.error == "User not found")
+            this.showErrorPopup('User not found');
+          this.loader.hide();
         },
       });
     }
@@ -65,5 +75,14 @@ export class LoginPageComponent {
   // Getter for the password form control
   get password() {
     return this.loginForm.get('password');
+  }
+
+  // Show error popup using Snackbar
+  showErrorPopup(message: string) {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000, // 3 seconds
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
+    });
   }
 }
