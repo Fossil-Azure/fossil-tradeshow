@@ -6,7 +6,9 @@
     <div class="input-group">
         <mat-form-field class="form-control" appearance="outline">
             <mat-label>Enter SKU or Scan Barcode</mat-label>
-            <input matInput type="text" [(ngModel)]="skuCode" (keyup.enter)="performAction()" />
+            <input matInput type="text" [(ngModel)]="skuCode" [formControl]="skuControl"
+                (keyup.enter)="performAction()" />
+            <mat-error *ngIf="skuControl.hasError('required')">SKU is required</mat-error>
             <button *ngIf="skuCode" matSuffix mat-icon-button aria-label="Search" (click)="performAction()">
                 <mat-icon>search</mat-icon>
             </button>
@@ -21,7 +23,17 @@
         </button>
     </div>
 
-    <div *ngIf="!isMobile" class="product-card">
+    <div *ngIf="notFound" class="error-card">
+        <div class="product-card-content">
+            <img src="assets/not_found.png" alt="No Product Found" class="no-product-image" />
+            <h2 class="no-product-title">Oops! No Product Found</h2>
+            <p class="no-product-description">
+                We couldn't find the product you were looking for. Try scanning the barcode again or enter a valid SKU.
+            </p>
+        </div>
+    </div>
+
+    <div *ngIf="showProductCard && !isMobile" class="product-card">
         <!-- Product Image Section -->
         <div class="product-image">
             <img src="assets/Watch.jpg" alt="Product Image" />
@@ -92,7 +104,7 @@
     </div>
 
     <!-- Mobile Layout -->
-    <div *ngIf="isMobile" class="product-grid">
+    <div *ngIf="showProductCard && isMobile" class="product-grid">
         <!-- Row 1 -->
         <div class="grid-item-mobile image-rating">
             <img src="assets/Watch.jpg" alt="Product Image" class="product-image-mobile">

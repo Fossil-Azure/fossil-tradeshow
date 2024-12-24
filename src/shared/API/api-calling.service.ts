@@ -14,6 +14,7 @@ export class ApiCallingService {
   private baseUrl = environment.apiUrl;
 
   private loginUrl = `${this.baseUrl}/api/auth/login`;
+  private findProduct = `${this.baseUrl}/searchUniqueProduct`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -56,5 +57,9 @@ export class ApiCallingService {
   logout(): void {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  getProduct(searchValue: string): Observable<any> {
+    return this.http.post(this.findProduct, { searchValue });
   }
 }

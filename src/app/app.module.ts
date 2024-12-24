@@ -17,11 +17,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ApiCallingService } from '../shared/API/api-calling.service';
 import { CartPageComponent } from './cart-page/cart-page.component';
 import { LoaderComponent } from './loader/loader.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { JwtInterceptor } from '../shared/Interceptor/jwt.interceptor';
 
 export function checkToken(authService: ApiCallingService): () => void {
   return () => {
@@ -39,6 +40,10 @@ export function checkToken(authService: ApiCallingService): () => void {
       provide: APP_INITIALIZER,
       useFactory: checkToken,
       deps: [ApiCallingService],
+      multi: true,
+    }, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
       multi: true,
     },
   ],

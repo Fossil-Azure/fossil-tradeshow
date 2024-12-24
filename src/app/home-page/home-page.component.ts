@@ -1,6 +1,9 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
+import { ApiCallingService } from '../../shared/API/api-calling.service';
+import { LoaderServiceService } from '../../shared/loader/loader-service.service';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home-page',
@@ -30,8 +33,11 @@ export class HomePageComponent {
   hoveredRating = 0;
   isMobile = false;
   allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128];
+  showProductCard = false;
+  notFound = false;
+  skuControl = new FormControl('', Validators.required);
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver, private api: ApiCallingService, private loader: LoaderServiceService) {
     // Observe screen size changes using BreakpointObserver
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
@@ -71,11 +77,23 @@ export class HomePageComponent {
 
   // Action to perform when text is entered or QR is scanned
   performAction(): void {
-    if (this.skuCode) {
-      console.log('Performing action with:', this.skuCode);
-      // Add your custom logic here
-    } else {
-      console.log('No input to perform the action with.');
+    if (this.skuControl.valid) {
+      this.notFound = false;
+      this.loader.show();
+      this.api.getProduct(this.skuCode).subscribe({
+        next: (response) => {
+          this.notFound = false;
+          this.showProductCard = true;
+          this.loader.hide();
+        },
+        error: (error) => {
+          console.log(error);
+          this.notFound = true;
+          this.showProductCard = false;
+          console.log(this.notFound);
+          this.loader.hide();
+        },
+      });
     }
   }
 
