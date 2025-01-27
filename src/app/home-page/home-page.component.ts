@@ -1,9 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ApiCallingService } from '../../shared/API/api-calling.service';
 import { LoaderServiceService } from '../../shared/loader/loader-service.service';
 import { FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CartserviceService } from '../../shared/CartService/cartservice.service';
 
 @Component({
   selector: 'app-home-page',
@@ -12,7 +15,10 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class HomePageComponent {
 
-  skuCode: string = 'FS4662';
+  @ViewChild('confirmDialog')
+  confirmDialog!: TemplateRef<any>;
+
+  skuCode!: string;
   showScanner: boolean = false;
   availableDevices: MediaDeviceInfo[] = [];
   selectedDevice: MediaDeviceInfo | null = null;
@@ -23,26 +29,80 @@ export class HomePageComponent {
   productQuantity: number = 1;
   stars: number[] = [1, 2, 3, 4, 5];
   userRating: number = 0;
-  productTitle = 'Machine Chronograph Smoke Stainless Steel Watch';
-  brandName = "Fossil";
-  season = "SU24";
-  platform = "Machine";
-  msrp = 180;
-  quantity = 1;
-  subTotal = this.msrp * this.quantity;
+  msrp = 0;
+  quantity: any = 1;
+  subTotal = 0;
   hoveredRating = 0;
   isMobile = false;
   allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128];
   showProductCard = false;
   notFound = false;
   skuControl = new FormControl('', Validators.required);
+  productDetails: any;
+  userInfo: any;
+  userCurrency: any;
+  confirmationMessage: any;
+  badgeCount: any;
 
-  constructor(private breakpointObserver: BreakpointObserver, private api: ApiCallingService, private loader: LoaderServiceService) {
+  constructor(private breakpointObserver: BreakpointObserver, private api: ApiCallingService,
+    private loader: LoaderServiceService, private dialog: MatDialog, private snackBar: MatSnackBar,
+    private cartService: CartserviceService) {
     // Observe screen size changes using BreakpointObserver
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
         this.isMobile = result.matches;
       });
+
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.userInfo = JSON.parse(user);
+      this.userCurrency = this.userInfo.currency;
+    } else {
+      this.userInfo = null;
+      api.logout();
+    }
+  }
+
+  get currencySymbol(): string {
+    switch (this.userCurrency) {
+      case 'USD':
+        return '$'; // Dollar
+      case 'INR':
+        return '₹'; // Indian Rupee
+      case 'SGD':
+        return 'S$'; // Singapore Dollar
+      case 'HKD':
+        return 'HK$'; // Hong Kong Dollar
+      case 'JPY':
+        return '¥'; // Japanese Yen
+      case 'AUD':
+        return 'A$'; // Australian Dollar
+      default:
+        return '$'; // Default to USD
+    }
+  }
+
+  get dynamicPrice(): number {
+    return this.getProductPrice();
+  }
+
+  getProductPrice(): number {
+    switch (this.userCurrency) {
+      case 'USD':
+        return this.productDetails.mrpUsd;
+      case 'INR':
+        return this.productDetails.mrpInr;
+      case 'SGD':
+        return this.productDetails.mrpSgd;
+      case 'HKD':
+        return this.productDetails.mrpHkd;
+      case 'JPY':
+        return this.productDetails.mrpJpy;
+      case 'AUD':
+        return this.productDetails.mrpAud;
+      default:
+        return this.productDetails.mrpUsd; // Default to USD
+    }
   }
 
   // Opens the QR scanner modal
@@ -72,7 +132,8 @@ export class HomePageComponent {
   // Clear the input field
   clearInput(): void {
     this.skuCode = '';
-    console.log('Input cleared');
+    this.notFound = false;
+    this.showProductCard = false;
   }
 
   // Action to perform when text is entered or QR is scanned
@@ -82,6 +143,9 @@ export class HomePageComponent {
       this.loader.show();
       this.api.getProduct(this.skuCode).subscribe({
         next: (response) => {
+          this.productDetails = response;
+          const price = this.getProductPrice();
+          this.subTotal = price * this.quantity;
           this.notFound = false;
           this.showProductCard = true;
           this.loader.hide();
@@ -90,7 +154,6 @@ export class HomePageComponent {
           console.log(error);
           this.notFound = true;
           this.showProductCard = false;
-          console.log(this.notFound);
           this.loader.hide();
         },
       });
@@ -99,13 +162,34 @@ export class HomePageComponent {
 
   increment(): void {
     this.quantity++;
-    this.subTotal = this.quantity * this.msrp;
+    const price = this.getProductPrice();
+    this.subTotal = price * this.quantity;
   }
 
   decrement(): void {
     if (this.quantity > 1) {
       this.quantity--;
-      this.subTotal = this.quantity * this.msrp;
+      const price = this.getProductPrice();
+      this.subTotal = price * this.quantity;
+    }
+  }
+
+  validateQuantity(): void {
+    const value = parseInt(this.quantity, 10);
+
+    if (!value || value < 1) {
+      this.quantity = 1;
+    } else {
+      this.quantity = value;
+    }
+    const price = this.getProductPrice();
+    this.subTotal = price * this.quantity;
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'];
+    if (!/^\d$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
     }
   }
 
@@ -119,5 +203,83 @@ export class HomePageComponent {
 
   hoverRating(rating: number): void {
     this.hoveredRating = rating; // Update the hovered rating
+  }
+
+  addToCart() {
+    if (this.userInfo == null) {
+      this.api.logout()
+    } else {
+      this.loader.show();
+      const currentCount = this.cartService.getCartCount();
+      this.api.addToCart(this.userInfo.emailId, this.productDetails, this.quantity, false).subscribe({
+        next: (response) => {
+          if (!response.success) {
+            const existingQuantity = response.cart.items.find(
+              (item: any) => item.product.sku === this.productDetails.sku
+            )?.quantity || 0;
+            this.loader.hide();
+
+            this.confirmationMessage = `The product "${this.productDetails.sku}" already has a quantity of ${existingQuantity} in the cart. Do you want to add the selected quantity ${this.quantity} to this?`;
+            const dialogRef = this.dialog.open(this.confirmDialog, {
+              id: 'confirm-dialog'
+            });
+
+            dialogRef.afterClosed().subscribe((confirmed) => {
+              console.log('Dialog closed. User confirmed:', confirmed);
+              if (confirmed) {
+                this.loader.show()
+                this.api.addToCart(this.userInfo.emailId, this.productDetails, this.quantity, true).subscribe({
+                  next: (finalResponse) => {
+                    this.showProductCard = false;
+                    this.skuCode = '';
+                    this.loader.hide()
+                    this.snackBar.open(finalResponse.message, 'Close', {
+                      duration: 3000,
+                      verticalPosition: 'bottom',
+                      horizontalPosition: 'center',
+                    });
+                  },
+                  error: (error) => {
+                    this.loader.hide();
+                    console.error('Error adding to cart after confirmation:', error);
+                    this.snackBar.open('Error adding item to the cart.', 'Close', {
+                      duration: 3000,
+                      panelClass: ['error-snackbar']
+                    });
+                  }
+                });
+              } else {
+                console.log('User canceled the addition.');
+              }
+            });
+          } else {
+            this.loader.hide();
+            this.showProductCard = false;
+            const updatedCount = currentCount + 1;
+            this.cartService.updateCartCount(updatedCount)
+            this.skuCode = '';
+            this.snackBar.open(response.message, 'Close', {
+              duration: 3000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'center',
+              panelClass: ['success-snackbar']
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Error adding to cart:', error);
+          this.loader.hide();
+          this.snackBar.open('An error occurred while adding the product.', 'Close', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+    }
+  }
+
+  closeDialog(confirmed: boolean): void {
+    this.dialog.closeAll();
+    this.dialog.getDialogById('confirm-dialog')?.close(confirmed);
   }
 }

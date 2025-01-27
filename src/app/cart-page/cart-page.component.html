@@ -1,5 +1,16 @@
 <div class="cart-page">
     <!-- Items Section -->
+    <div *ngIf="cartItems.length <= 0" class="empty-cart-card">
+        <div class="empty-cart-card-content">
+            <img src="assets/empty_cart.png" alt="Empty Cart" class="empty-cart-image" />
+            <h2 class="empty-cart-title">Your Cart is Empty</h2>
+            <p class="empty-cart-description">
+                Looks like you haven't added any items to your cart yet. Start exploring our products and add your
+                favorites to the cart!
+            </p>
+            <button class="shop-now-btn" (click)="navigateToShop()">Shop Now</button>
+        </div>
+    </div>
     <div *ngIf="!isMobile" class="cart-items">
         <div class="cart-item" *ngFor="let item of cartItems">
             <div class="item-image">
@@ -9,21 +20,19 @@
                 <span title="{{ item.name }}">{{ item.name }}</span>
                 <p class="item-sku">SKU: {{ item.sku }}</p>
                 <p class="item-brand">Brand: {{ item.brand }}</p>
-                <p class="item-mrp">MSRP/MRP: ${{ item.price }}</p>
+                <p class="item-mrp" style="font-weight: bold;">MSRP/MRP: {{ currencySymbol }} {{ item.price | number: '1.2-2' }}</p>
             </div>
             <div class="item-actions">
                 <div class="quantity-control">
                     <label>Quantity</label>
-                    <button (click)="decreaseQuantity(item)">-</button>
+                    <button (click)="decreaseQuantity(item)" class="btn">-</button>
                     <input type="text" [(ngModel)]="item.quantity" (input)="validateQuantity(item)"
                         class="quantity-input" />
-                    <button (click)="increaseQuantity(item)">+</button>
+                    <button (click)="increaseQuantity(item)" class="btn">+</button>
                 </div>
-                <p class="item-subtotal">Subtotal: ${{ (item.quantity * item.price).toFixed(2) }}</p>
+                <p class="item-subtotal">Subtotal: {{ currencySymbol }} {{ (item.quantity * item.price) | number: '1.2-2' }}</p>
             </div>
-            <button mat-mini-fab class="custom-fab" aria-label="Delete Icon" (click)="removeItem(item)">
-                <mat-icon>delete</mat-icon>
-            </button>
+            <button class="remove-item-btn" (click)="removeItem(item)">Remove Item</button>
         </div>
     </div>
 
@@ -36,21 +45,20 @@
                 <span title="{{ item.name }}">{{ item.name }}</span>
                 <p class="item-sku">SKU: {{ item.sku }}</p>
                 <p class="item-brand">Brand: {{ item.brand }}</p>
-                <p class="item-mrp">MSRP/MRP: ${{ item.price }}</p>
+                <p class="item-mrp">MSRP/MRP: {{ currencySymbol }} {{ item.price | number: '1.2-2' }}</p>
                 <div class="item-actions">
                     <div class="quantity-control">
                         <label>Quantity</label>
-                        <button (click)="decreaseQuantity(item)">-</button>
+                        <button (click)="decreaseQuantity(item)" class="btn">-</button>
                         <input type="text" [(ngModel)]="item.quantity" (input)="validateQuantity(item)"
                             class="quantity-input" />
-                        <button (click)="increaseQuantity(item)">+</button>
+                        <button (click)="increaseQuantity(item)" class="btn">+</button>
                     </div>
-                    <p class="item-subtotal">Subtotal: ${{ (item.quantity * item.price).toFixed(2) }}</p>
+                    <p class="item-subtotal">Subtotal: {{ currencySymbol }} {{ (item.quantity * item.price) | number: '1.2-2' }}</p>
                 </div>
+                <button class="remove-item-btn" (click)="removeItem(item)">Remove Item</button>
             </div>
-            <button mat-mini-fab class="custom-fab" aria-label="Delete Icon" (click)="removeItem(item)">
-                <mat-icon>delete</mat-icon>
-            </button>
+
         </div>
     </div>
 
@@ -59,13 +67,13 @@
         <h3>Order Summary</h3>
         <p>Total SKU: {{cartItems.length}}</p>
         <p>Total Quantity: {{ totalItems }}</p>
-        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: ${{ totalPrice | number:'1.2-2' }}</p>
+        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: {{ currencySymbol }} {{ totalPrice | number:'1.2-2' }}</p>
         <button class="checkout-button" [disabled]="cartItems.length <= 0" (click)="proceedToCheckout()">Place
             Order</button>
     </div>
 
     <div *ngIf="isMobile" class="cart-summary">
-        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: ${{ totalPrice | number:'1.2-2' }}</p>
+        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: {{ currencySymbol }} {{ totalPrice | number:'1.2-2' }}</p>
         <button class="checkout-button" [disabled]="cartItems.length <= 0" (click)="proceedToCheckout()">Place
             Order</button>
     </div>

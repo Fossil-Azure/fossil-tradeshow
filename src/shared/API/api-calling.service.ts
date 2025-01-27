@@ -15,6 +15,7 @@ export class ApiCallingService {
 
   private loginUrl = `${this.baseUrl}/api/auth/login`;
   private findProduct = `${this.baseUrl}/searchUniqueProduct`;
+  private cart = `${this.baseUrl}/cart`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -24,8 +25,9 @@ export class ApiCallingService {
   }
 
   // Save the token in localStorage or sessionStorage
-  saveToken(token: string): void {
-    localStorage.setItem('token', token);
+  saveToken(response: any): void {
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('user', JSON.stringify(response.user));
   }
 
   // Get the stored token
@@ -49,17 +51,38 @@ export class ApiCallingService {
         return false; // If decoding fails, consider the token invalid
       }
     }
-
     return false; // No token found
   }
 
   // Logout the user
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.router.navigate(['/login']);
   }
 
   getProduct(searchValue: string): Observable<any> {
     return this.http.post(this.findProduct, { searchValue });
+  }
+
+  addToCart(emailId: string, product: any, quantity: number, confirmAddition: boolean): Observable<any> {
+    const requestBody = {
+      product,
+      quantity,
+      confirmAddition
+    };
+    return this.http.post(`${this.cart}/${emailId}/add`, requestBody);
+  }
+
+  getCart(emailId: string): Observable<any> {
+    return this.http.get(`${this.cart}/${emailId}`);
+  }
+
+  removeItem(emailId: string, sku: string): Observable<void> {
+    return this.http.delete<void>(`${this.cart}/${emailId}/item/${sku}`);
+  }
+
+  updateCartItemQuantity(emailId: string, sku: string, quantity: number): Observable<any> {
+    return this.http.put(`${this.cart}/${emailId}/item/${sku}/quantity/${quantity}`, {});
   }
 }

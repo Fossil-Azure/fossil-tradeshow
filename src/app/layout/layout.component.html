@@ -7,7 +7,8 @@
             <img (click)="navigateTo('/tradeshow/home')" src="assets/fossil_logo.png" alt="Fossil Group" class="company-logo">
         </div>
         <div class="header-icons" (click)="redirectToCart()">
-            <mat-icon>shopping_cart</mat-icon>
+            <mat-icon [matBadge]="badgeCount" matBadgeColor="warn"
+            matBadgeClass="custom-badge">shopping_cart</mat-icon>
         </div>
     </div>
 

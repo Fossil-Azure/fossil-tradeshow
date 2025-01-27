@@ -23,6 +23,8 @@ import { CartPageComponent } from './cart-page/cart-page.component';
 import { LoaderComponent } from './loader/loader.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { JwtInterceptor } from '../shared/Interceptor/jwt.interceptor';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatBadgeModule } from '@angular/material/badge';
 
 export function checkToken(authService: ApiCallingService): () => void {
   return () => {
@@ -69,7 +71,9 @@ export function checkToken(authService: ApiCallingService): () => void {
     MatToolbarModule,
     ZXingScannerModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule,
+    MatBadgeModule
   ],
   exports: [
     LoginPageComponent,

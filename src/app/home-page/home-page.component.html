@@ -33,10 +33,20 @@
         </div>
     </div>
 
+    <div *ngIf="!notFound && !showProductCard" class="prompt-card">
+        <div class="prompt-card-content">
+            <img src="assets/seo.png" alt="Enter SKU" class="prompt-image" />
+            <h2 class="prompt-title">Search for a Product</h2>
+            <p class="prompt-description">
+                Enter the SKU or scan the barcode to find your product quickly.
+            </p>
+        </div>
+    </div>
+
     <div *ngIf="showProductCard && !isMobile" class="product-card">
         <!-- Product Image Section -->
         <div class="product-image">
-            <img src="assets/Watch.jpg" alt="Product Image" />
+            <img [src]="productDetails.imageUrl" alt="Product Image" />
             <!-- Rating Section -->
             <div class="product-rating">
                 <div class="stars">
@@ -55,49 +65,45 @@
                 <!-- Row 1 -->
                 <div class="grid-item" style="grid-column: span 2;">
                     <label class="desktop-label">Product Title</label>
-                    <input class="desktop-input" type="text" [(ngModel)]="productTitle" placeholder="Product Title">
+                    <span class="detail-value">{{productDetails.productTitle}}</span>
                 </div>
                 <div class="grid-item">
                     <label class="desktop-label">Brand</label>
-                    <input class="desktop-input" type="text" [(ngModel)]="brandName" placeholder="Brand Name">
+                    <span class="detail-value">{{productDetails.brand}}</span>
                 </div>
 
                 <!-- Row 2 -->
                 <div class="grid-item">
                     <label class="desktop-label">Season</label>
-                    <input class="desktop-input" type="text" [(ngModel)]="season" placeholder="Season">
+                    <span class="detail-value">{{productDetails.season}}</span>
                 </div>
                 <div class="grid-item" style="grid-column: span 2;">
                     <label class="desktop-label">Platform</label>
-                    <input class="desktop-input" type="text" [(ngModel)]="platform" placeholder="Platform">
+                    <span class="detail-value">{{productDetails.platform}}</span>
                 </div>
 
                 <!-- Row 3 -->
                 <div class="grid-item">
                     <label class="desktop-label">MSRP / MRP</label>
-                    <input class="desktop-input" type="text" [(ngModel)]="msrp" placeholder="MSRP/ MRP">
+                    <span class="detail-value">{{ currencySymbol }} {{ dynamicPrice | number: '1.2-2' }}</span>
                 </div>
                 <div class="grid-item">
                     <label class="desktop-label">Quantity</label>
-                    <div class="quantity-wrapper desktop-input" style="height: 35px;">
-                        <button mat-icon-button type="button" (click)="decrement()" [disabled]="quantity <= 1">
-                            <mat-icon>remove</mat-icon>
-                        </button>
-                        <input matInput [(ngModel)]="quantity" min="1" value="1" />
-                        <button mat-icon-button type="button" (click)="increment()">
-                            <mat-icon>add</mat-icon>
-                        </button>
+                    <div class="quantity-wrapper desktop-input">
+                        <button (click)="decrement()" class="btn">-</button>
+                        <input type="text" [(ngModel)]="quantity" (input)="validateQuantity()" class="quantity-input" />
+                        <button (click)="increment()" class="btn">+</button>
                     </div>
                 </div>
                 <div class="grid-item">
                     <label class="desktop-label">Sub Total</label>
-                    <input class="desktop-input" type="text" [(ngModel)]="subTotal" placeholder="Sub Total">
+                    <span class="detail-value">{{ currencySymbol }} {{ subTotal | number: '1.2-2' }}</span>
                 </div>
             </div>
 
             <!-- Add to Cart Button -->
             <div class="cart-button">
-                <button mat-raised-button color="primary" class="cartButton">
+                <button mat-raised-button color="primary" class="cartButton" (click)="addToCart()">
                     <mat-icon>shopping_cart</mat-icon>Add to Cart</button>
             </div>
         </div>
@@ -107,7 +113,7 @@
     <div *ngIf="showProductCard && isMobile" class="product-grid">
         <!-- Row 1 -->
         <div class="grid-item-mobile image-rating">
-            <img src="assets/Watch.jpg" alt="Product Image" class="product-image-mobile">
+            <img [src]="productDetails.imageUrl" alt="Product Image" class="product-image-mobile">
             <div class="product-rating-mobile">
                 <div class="stars">
                     <mat-icon *ngFor="let star of [1, 2, 3, 4, 5]; let i = index" (click)="setRating(i + 1)"
@@ -119,50 +125,46 @@
             </div>
         </div>
         <div class="grid-item-mobile product-title">
-            <div>Machine Chronograph Smoke Stainless Steel Watch</div>
+            <span>{{productDetails.productTitle}}</span>
         </div>
 
         <!-- Row 2 -->
         <div class="grid-item-mobile">
             <label>Brand</label>
-            <input type="text" [(ngModel)]="brandName" placeholder="Brand">
+            <span>{{productDetails.brand}}</span>
         </div>
         <div class="grid-item-mobile">
             <label>Season</label>
-            <input type="text" [(ngModel)]="season" placeholder="Season">
+            <span>{{productDetails.season}}</span>
         </div>
 
         <!-- Row 3 -->
         <div class="grid-item-mobile">
             <label>Platform</label>
-            <input type="text" [(ngModel)]="platform" placeholder="Platform">
+            <span>{{productDetails.platform}}</span>
         </div>
         <div class="grid-item-mobile">
             <label>MRP / MSRP</label>
-            <input type="text" [(ngModel)]="msrp" placeholder="MRP/MSRP">
+            <span>{{ currencySymbol }} {{ dynamicPrice | number: '1.2-2' }}</span>
         </div>
 
         <!-- Row 4 -->
         <div class="grid-item-mobile">
-            <label>Quantity</label>
+            <label class="desktop-label">Quantity</label>
             <div class="quantity-wrapper">
-                <button mat-icon-button type="button" (click)="decrement()" [disabled]="quantity <= 1">
-                    <mat-icon>remove</mat-icon>
-                </button>
-                <input matInput [(ngModel)]="quantity" min="1" value="1" />
-                <button mat-icon-button type="button" (click)="increment()">
-                    <mat-icon>add</mat-icon>
-                </button>
+                <button (click)="decrement()" class="btn">-</button>
+                <input type="text" [(ngModel)]="quantity" (input)="validateQuantity()" class="mobile-quantity-input" />
+                <button (click)="increment()" class="btn">+</button>
             </div>
         </div>
         <div class="grid-item-mobile">
             <label>Sub Total</label>
-            <input type="text" [(ngModel)]="subTotal" placeholder="Sub Total">
+            <span>{{ currencySymbol }} {{ subTotal | number: '1.2-2' }}</span>
         </div>
 
         <!-- Row 5 -->
         <div class="grid-item-mobile cart-button" colspan="2">
-            <button mat-raised-button color="primary" class="cartButton">
+            <button mat-raised-button color="primary" class="cartButton" (click)="addToCart()">
                 <mat-icon>shopping_cart</mat-icon>Add to Cart</button>
         </div>
     </div>
@@ -175,3 +177,16 @@
     </zxing-scanner>
     <button (click)="closeScanner()" class="close-button">Close</button>
 </div>
+
+<ng-template #confirmDialog>
+    <div class="dialog-container">
+        <h2 mat-dialog-title class="dialog-title">Confirm Addition</h2>
+        <mat-dialog-content class="dialog-content">
+            <p>{{ confirmationMessage }}</p>
+        </mat-dialog-content>
+        <mat-dialog-actions class="dialog-actions">
+            <button class="cancel-button" (click)="closeDialog(false)">Cancel</button>
+            <button class="confirm-button" (click)="closeDialog(true)">Confirm</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>

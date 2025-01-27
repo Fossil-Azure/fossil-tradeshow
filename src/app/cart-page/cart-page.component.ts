@@ -1,5 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { ApiCallingService } from '../../shared/API/api-calling.service';
+import { LoaderServiceService } from '../../shared/loader/loader-service.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CartserviceService } from '../../shared/CartService/cartservice.service';
 
 @Component({
   selector: 'app-cart-page',
@@ -10,71 +15,146 @@ export class CartPageComponent {
   isMobile: boolean = false;
   userRating: number = 0;
   hoveredRating!: number;
+  userInfo: any;
+  userCurrency: any;
+  cart: any;
+  currencySymbolMap: { [key: string]: string } = {
+    USD: '$',
+    INR: '₹',
+    SGD: 'S$',
+    HKD: 'HK$',
+    JPY: '¥',
+    AUD: 'A$'
+  };
+  cartItems: any[] = [];
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver, private router: Router, private api: ApiCallingService,
+    private loader: LoaderServiceService, private snackBar: MatSnackBar, private cartService: CartserviceService) {
     // Observe screen size changes using BreakpointObserver
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
         this.isMobile = result.matches;
       });
+
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.userInfo = JSON.parse(user);
+      this.userCurrency = this.userInfo.currency;
+      this.fetchCart();
+    } else {
+      this.userInfo = null;
+      api.logout();
+    }
   }
 
-  cartItems = [
-    { sku: 'SKU12345', name: 'Machine Chronograph Smoke Stainless Steel Watch', brand: 'Fossil', price: 199.99, quantity: 3, image: 'assets/Watch.jpg', subtotal: 599.97 },
-    { sku: 'SKU12346', name: 'Product Title 2', brand: 'Armani Exchange', price: 159.99, quantity: 1, image: 'assets/AX5722.jpg', subtotal: 159.99 },
-    { sku: 'SKU12347', name: 'Product Title 3', brand: 'Fossil', price: 179.99, quantity: 1, image: 'assets/ES4081.jpg', subtotal: 179.99 },
-    { sku: 'SKU12348', name: 'Product Title 4', brand: 'Michael Kors', price: 129.99, quantity: 7, image: 'assets/MK3898.jpg', subtotal: 909.93 },
-    { sku: 'SKU12349', name: 'Product Title 5', brand: 'Skagen', price: 109.99, quantity: 1, image: 'assets/SKW2665.jpg', subtotal: 109.99 },
-    { sku: 'SKU12350', name: 'Product Title 6', brand: 'Sketchers', price: 99.99, quantity: 14, image: 'assets/SR5144.JPG', subtotal: 1399.86 },
-  ];
+  fetchCart(): void {
+    this.loader.show()
+    this.api.getCart(this.userInfo.emailId).subscribe({
+      next: (response) => {
+        this.cartItems = response.items.map((item: any) => ({
+          image: item.product.imageUrl,
+          name: item.product.productTitle,
+          sku: item.product.sku,
+          brand: item.product.brand,
+          price: this.getProductPrice(item.product),
+          quantity: item.quantity
+        }));
+        this.loader.hide()
+      },
+      error: (error) => {
+        console.error('Error fetching cart:', error);
+        this.loader.hide()
+      }
+    });
+  }
+
+  getProductPrice(product: any): number {
+    switch (this.userCurrency) {
+      case 'USD':
+        return product.mrpUsd;
+      case 'INR':
+        return product.mrpInr;
+      case 'SGD':
+        return product.mrpSgd;
+      case 'HKD':
+        return product.mrpHkd;
+      case 'JPY':
+        return product.mrpJpy;
+      case 'AUD':
+        return product.mrpAud;
+      default:
+        return product.mrpUsd; // Default to USD
+    }
+  }
+
+  get currencySymbol(): string {
+    return this.currencySymbolMap[this.userCurrency] || '$';
+  }
 
   get totalItems(): number {
-    return this.cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    if (!this.cartItems || this.cartItems.length === 0) {
+      return 0;
+    }
+
+    return this.cartItems.reduce((sum: number, item: any) => {
+      const quantity = item.quantity || 0;
+      return sum + quantity;
+    }, 0);
   }
 
   get totalPrice(): number {
-    return parseFloat(
-      this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2)
-    );
+    if (!this.cartItems || this.cartItems.length === 0) {
+      return 0;
+    }
+
+    const total = this.cartItems.reduce((sum: number, item: any) => {
+      const price = item.price || 0;
+      const quantity = item.quantity || 0;
+      return sum + price * quantity;
+    }, 0);
+
+    return parseFloat(total.toFixed(2));
   }
+
 
   updateSubtotal(item: any): void {
     item.subtotal = item.price * item.quantity;
   }
 
-  increaseQuantity(item: any): void {
-    item.quantity++;
-  }
-
-  decreaseQuantity(item: any): void {
-    if (item.quantity > 1) item.quantity--;
-  }
-
   removeItem(item: any): void {
-    this.cartItems = this.cartItems.filter(cartItem => cartItem !== item);
+    const emailId = this.userInfo.emailId;
+    const sku = item.sku;
+    const currentCount = this.cartService.getCartCount();
+    if (confirm(`Are you sure you want to remove "${item.name}" from your cart?`)) {
+      this.api.removeItem(emailId, sku).subscribe({
+        next: () => {
+          this.cartItems = this.cartItems.filter((cartItem: { sku: any; }) => cartItem.sku !== sku);
+          const updatedCount = currentCount - 1;
+          this.cartService.updateCartCount(updatedCount)
+          this.snackBar.open(`"${item.name}" has been removed from your cart.`, 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+        },
+        error: (error) => {
+          console.error('Error removing item from cart:', error);
+          this.snackBar.open('An error occurred while trying to remove the item.', 'Close', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+    }
   }
 
   proceedToCheckout(): void {
     alert('Proceeding to checkout...');
   }
 
-  updateQuantity(item: any): void {
-    if (item.quantity < 1) {
-      item.quantity = 1; // Reset to 1 if the user enters an invalid value
-    }
-    item.subtotal = item.quantity * item.price; // Update subtotal
-  }
-
   validateQuantity(item: any): void {
-    const value = parseInt(item.quantity, 10);
-
-    if (!value || value < 1) {
-      item.quantity = 1; // Reset to 1 if the input is invalid
-    } else {
-      item.quantity = value;
+    if (!item.quantity || item.quantity < 1) {
+      item.quantity = 1; // Reset invalid input
     }
-
-    item.subtotal = item.quantity * item.price; // Update subtotal
   }
 
   rateProduct(star: number): void {
@@ -87,5 +167,47 @@ export class CartPageComponent {
 
   hoverRating(rating: number): void {
     this.hoveredRating = rating; // Update the hovered rating
+  }
+
+  navigateToShop() {
+    this.router.navigate(['/tradeshow/home']);
+  }
+
+  updateQuantity(item: any, newQuantity: number): void {
+    if (newQuantity < 1) {
+      this.snackBar.open('Quantity cannot be less than 1.', 'Close', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
+    this.api.updateCartItemQuantity(this.userInfo.emailId, item.sku, newQuantity).subscribe({
+      next: (response) => {
+        // Update the local cart item quantity
+        item.quantity = newQuantity;
+        this.snackBar.open(`Quantity updated to ${newQuantity} for SKU ${item.sku}.`, 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('Error updating quantity:', error);
+        this.snackBar.open('Failed to update quantity.', 'Close', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    });
+  }
+
+  decreaseQuantity(item: any): void {
+    if (item.quantity > 1) {
+      this.updateQuantity(item, item.quantity - 1);
+    }
+  }
+
+  increaseQuantity(item: any): void {
+    this.updateQuantity(item, item.quantity + 1);
   }
 }

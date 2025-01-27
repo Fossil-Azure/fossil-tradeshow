@@ -50,7 +50,7 @@ export class LoginPageComponent {
       this.api.login(email, password).subscribe({
         next: (response) => {
           // Save the token and redirect to the dashboard
-          this.api.saveToken(response.token);
+          this.api.saveToken(response);
           this.router.navigate(['/tradeshow/home']);
           this.loader.hide();
         },
