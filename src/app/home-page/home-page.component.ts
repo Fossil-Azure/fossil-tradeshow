@@ -138,6 +138,7 @@ export class HomePageComponent {
 
   // Action to perform when text is entered or QR is scanned
   performAction(): void {
+    this.quantity = 1;
     if (this.skuControl.valid) {
       this.notFound = false;
       this.loader.show();

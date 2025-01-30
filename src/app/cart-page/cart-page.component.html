@@ -20,7 +20,8 @@
                 <span title="{{ item.name }}">{{ item.name }}</span>
                 <p class="item-sku">SKU: {{ item.sku }}</p>
                 <p class="item-brand">Brand: {{ item.brand }}</p>
-                <p class="item-mrp" style="font-weight: bold;">MSRP/MRP: {{ currencySymbol }} {{ item.price | number: '1.2-2' }}</p>
+                <p class="item-mrp" style="font-weight: bold;">MSRP/MRP: {{ currencySymbol }} {{ item.price | number:
+                    '1.2-2' }}</p>
             </div>
             <div class="item-actions">
                 <div class="quantity-control">
@@ -30,7 +31,8 @@
                         class="quantity-input" />
                     <button (click)="increaseQuantity(item)" class="btn">+</button>
                 </div>
-                <p class="item-subtotal">Subtotal: {{ currencySymbol }} {{ (item.quantity * item.price) | number: '1.2-2' }}</p>
+                <p class="item-subtotal">Subtotal: {{ currencySymbol }} {{ (item.quantity * item.price) | number:
+                    '1.2-2' }}</p>
             </div>
             <button class="remove-item-btn" (click)="removeItem(item)">Remove Item</button>
         </div>
@@ -47,14 +49,15 @@
                 <p class="item-brand">Brand: {{ item.brand }}</p>
                 <p class="item-mrp">MSRP/MRP: {{ currencySymbol }} {{ item.price | number: '1.2-2' }}</p>
                 <div class="item-actions">
-                    <div class="quantity-control">
+                    <div class="mobile-quantity-control">
                         <label>Quantity</label>
                         <button (click)="decreaseQuantity(item)" class="btn">-</button>
                         <input type="text" [(ngModel)]="item.quantity" (input)="validateQuantity(item)"
                             class="quantity-input" />
                         <button (click)="increaseQuantity(item)" class="btn">+</button>
                     </div>
-                    <p class="item-subtotal">Subtotal: {{ currencySymbol }} {{ (item.quantity * item.price) | number: '1.2-2' }}</p>
+                    <p class="item-subtotal">Subtotal: {{ currencySymbol }} {{ (item.quantity * item.price) | number:
+                        '1.2-2' }}</p>
                 </div>
                 <button class="remove-item-btn" (click)="removeItem(item)">Remove Item</button>
             </div>
@@ -63,18 +66,102 @@
     </div>
 
     <!-- Order Summary Section -->
-    <div *ngIf="!isMobile" class="cart-summary">
+    <div *ngIf="!isMobile && cartItems.length > 0" class="cart-summary">
         <h3>Order Summary</h3>
         <p>Total SKU: {{cartItems.length}}</p>
         <p>Total Quantity: {{ totalItems }}</p>
-        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: {{ currencySymbol }} {{ totalPrice | number:'1.2-2' }}</p>
+        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: {{ currencySymbol }} {{ totalPrice |
+            number:'1.2-2' }}</p>
         <button class="checkout-button" [disabled]="cartItems.length <= 0" (click)="proceedToCheckout()">Place
             Order</button>
     </div>
 
-    <div *ngIf="isMobile" class="cart-summary">
-        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: {{ currencySymbol }} {{ totalPrice | number:'1.2-2' }}</p>
+    <div *ngIf="isMobile && cartItems.length > 0" class="cart-summary">
+        <p style="font-weight: bold; font-size: 1.5rem;">Total Price: {{ currencySymbol }} {{ totalPrice |
+            number:'1.2-2' }}</p>
         <button class="checkout-button" [disabled]="cartItems.length <= 0" (click)="proceedToCheckout()">Place
             Order</button>
     </div>
 </div>
+
+<ng-template #confirmDialog>
+    <div class="confirm-dialog-container">
+        <h2 mat-dialog-title class="dialog-title">
+            <mat-icon class="warning-icon">warning</mat-icon>
+            Confirm Removal
+        </h2>
+
+        <mat-dialog-content class="dialog-content">
+            <p>
+                {{confirmationMessage}}
+            </p>
+        </mat-dialog-content>
+
+        <mat-dialog-actions class="dialog-actions">
+            <button class="cancel-button" (click)="closeDialog(false)">Cancel</button>
+            <button class="confirm-button" (click)="closeDialog(true)">Remove</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+
+<ng-template #placeOrder>
+    <div class="order-dialog-container">
+        <h2 mat-dialog-title class="dialog-title">
+            <mat-icon class="check-icon">shopping_cart</mat-icon>
+            Confirm Your Order
+        </h2>
+
+        <mat-dialog-content class="dialog-content">
+            <p>You are about to place an order for:</p>
+
+            <div class="table-container">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th class="header-sku">SKU Code</th>
+                            <th class="header-quantity">Quantity</th>
+                            <th class="header-total">Sub Total ({{ currencySymbol }})</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of cartItems">
+                            <td>{{ item.sku }}</td>
+                            <td style="text-align: center;">{{ item.quantity }}</td>
+                            <td style="text-align: center;">{{ (item.quantity * item.price) | number:'1.2-2' }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td style="text-align: left;font-weight: bold;">Total</td>
+                            <td style="font-weight: bold;">{{ totalItems }}</td>
+                            <td style="font-weight: bold;">{{ totalPrice | number:'1.2-2' }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </mat-dialog-content>
+
+        <mat-dialog-actions class="dialog-actions">
+            <div class="button-container">
+                <button class="cancel-button" (click)="closePopUp()">Cancel</button>
+                <button class="confirm-button" (click)="confirmOrder()">Confirm Order</button>
+            </div>
+        </mat-dialog-actions>
+    </div>
+</ng-template>
+
+<ng-template #duplicateDialog>
+    <div class="dialog-container">
+        <h2 mat-dialog-title class="dialog-title">
+            <mat-icon class="info-icon">help_outline</mat-icon>
+            Duplicate SKUs in Orders History
+        </h2>
+        <mat-dialog-content class="dialog-content">
+            <p>{{ duplicateOrder }}</p>
+        </mat-dialog-content>
+        <mat-dialog-actions class="dialog-actions">
+            <button class="cancel-button" (click)="closeOrderDialog(false)">Cancel</button>
+            <button class="confirm-button" (click)="closeOrderDialog(true)">Confirm</button>
+        </mat-dialog-actions>
+    </div>
+</ng-template>

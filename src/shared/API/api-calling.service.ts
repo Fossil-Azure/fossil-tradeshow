@@ -10,12 +10,13 @@ import { environment } from '../../environment/environment.prod';
 })
 export class ApiCallingService {
 
-  // private baseUrl = "http://localhost:8080";
-  private baseUrl = environment.apiUrl;
+  private baseUrl = "http://localhost:8080";
+  // private baseUrl = environment.apiUrl;
 
   private loginUrl = `${this.baseUrl}/api/auth/login`;
   private findProduct = `${this.baseUrl}/searchUniqueProduct`;
   private cart = `${this.baseUrl}/cart`;
+  private order = `${this.baseUrl}/orders`;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -84,5 +85,13 @@ export class ApiCallingService {
 
   updateCartItemQuantity(emailId: string, sku: string, quantity: number): Observable<any> {
     return this.http.put(`${this.cart}/${emailId}/item/${sku}/quantity/${quantity}`, {});
+  }
+
+  getUsersOrders(emailId: string): Observable<any> {
+    return this.http.get(`${this.order}/user/${emailId}`);
+  }
+
+  placeOrder(order: any, confirm: boolean): Observable<any> {
+    return this.http.post(`${this.order}/place?confirm=${confirm}`, order);
   }
 }

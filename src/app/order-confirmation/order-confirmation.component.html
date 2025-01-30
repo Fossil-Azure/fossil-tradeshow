@@ -1,0 +1,35 @@
+<div class="order-confirmation-container" @fadeIn>
+    <!-- Success Icon Animation -->
+    <div class="success-animation" *ngIf="orderConfirmed" @scaleUp>
+        <mat-icon class="check-icon">check_circle</mat-icon>
+    </div>
+
+    <h2 class="title">Order Confirmed!</h2>
+    <p class="subtitle">Thank you for your purchase. Your order has been placed successfully.</p>
+
+    <!-- Scrollable Order Summary -->
+    <div class="order-details">
+        <!-- <h5>Order Summary</h5> -->
+        <div class="scrollable-items">
+            <ul>
+                <li *ngFor="let item of orderData.items">
+                    <img [src]="item.product.imageUrl" class="product-img" />
+                    <div class="item-details">
+                        <p><strong>{{ item.product.productTitle }}</strong></p>
+                        <p>Quantity: {{ item.quantity }}</p>
+                        <p>Price: {{ item.product.mrpInr | currency:'INR' }}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Fixed Bottom Section -->
+    <div class="bottom-section">
+        <p class="total-amount">Total: <strong>{{ orderData.totalAmount | currency:'INR' }}</strong></p>
+        <div class="button-container">
+            <button class="back-home-button">Continue Shopping</button>
+            <button class="my-order-button">My Orders</button>
+        </div>
+    </div>
+</div>

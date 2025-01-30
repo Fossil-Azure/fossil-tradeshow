@@ -56,8 +56,10 @@ export class LayoutComponent {
     this.loader.show()
     this.api.getCart(this.userInfo.emailId).subscribe({
       next: (response) => {
-        this.badgeCount = response.items.length
-        this.cartService.updateCartCount(this.badgeCount);
+        if(response) {
+          this.badgeCount = response.items.length
+          this.cartService.updateCartCount(this.badgeCount);
+        }
         this.loader.hide()
       },
       error: (error) => {

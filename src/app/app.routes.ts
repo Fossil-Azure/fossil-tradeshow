@@ -4,6 +4,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from '../shared/Interceptor/auth.guard';
 import { CartPageComponent } from './cart-page/cart-page.component';
+import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -14,6 +15,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
       { path: 'cart', component: CartPageComponent },
+      { path: 'order-confirmation', component: OrderConfirmationComponent}
     ],
     canActivate: [AuthGuard]
   },

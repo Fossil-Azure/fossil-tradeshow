@@ -25,6 +25,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { JwtInterceptor } from '../shared/Interceptor/jwt.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatBadgeModule } from '@angular/material/badge';
+import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 
 export function checkToken(authService: ApiCallingService): () => void {
   return () => {
@@ -54,7 +55,8 @@ export function checkToken(authService: ApiCallingService): () => void {
     HomePageComponent,
     LayoutComponent,
     CartPageComponent,
-    LoaderComponent
+    LoaderComponent,
+    OrderConfirmationComponent
   ],
   imports: [
     BrowserModule,
