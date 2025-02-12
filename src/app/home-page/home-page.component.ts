@@ -11,10 +11,9 @@ import { CartserviceService } from '../../shared/CartService/cartservice.service
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
-  styleUrl: './home-page.component.css'
+  styleUrl: './home-page.component.css',
 })
 export class HomePageComponent {
-
   @ViewChild('confirmDialog')
   confirmDialog!: TemplateRef<any>;
 
@@ -37,19 +36,25 @@ export class HomePageComponent {
   allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128];
   showProductCard = false;
   notFound = false;
-  skuControl = new FormControl('', Validators.required);
+  skuControl = new FormControl('');
   productDetails: any;
   userInfo: any;
   userCurrency: any;
   confirmationMessage: any;
   badgeCount: any;
+  isLoading: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private api: ApiCallingService,
-    private loader: LoaderServiceService, private dialog: MatDialog, private snackBar: MatSnackBar,
-    private cartService: CartserviceService) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private api: ApiCallingService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private cartService: CartserviceService
+  ) {
     // Observe screen size changes using BreakpointObserver
-    this.breakpointObserver.observe([Breakpoints.Handset])
-      .subscribe(result => {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe((result) => {
         this.isMobile = result.matches;
       });
 
@@ -117,7 +122,7 @@ export class HomePageComponent {
 
   // Handle QR code result
   handleQrCodeResult(result: string) {
-    this.skuCode = result;  // Fill the input field with scanned text
+    this.skuCode = result; // Fill the input field with scanned text
     this.closeScanner();
   }
 
@@ -125,7 +130,7 @@ export class HomePageComponent {
   onCamerasFound(devices: MediaDeviceInfo[]) {
     this.availableDevices = devices;
     if (devices && devices.length > 0) {
-      this.selectedDevice = devices[0];  // Select the first camera
+      this.selectedDevice = devices[0]; // Select the first camera
     }
   }
 
@@ -138,10 +143,10 @@ export class HomePageComponent {
 
   // Action to perform when text is entered or QR is scanned
   performAction(): void {
+    this.isLoading = true;
     this.quantity = 1;
     if (this.skuControl.valid) {
       this.notFound = false;
-      this.loader.show();
       this.api.getProduct(this.skuCode).subscribe({
         next: (response) => {
           this.productDetails = response;
@@ -149,13 +154,13 @@ export class HomePageComponent {
           this.subTotal = price * this.quantity;
           this.notFound = false;
           this.showProductCard = true;
-          this.loader.hide();
+          this.isLoading = false;
         },
         error: (error) => {
           console.log(error);
           this.notFound = true;
           this.showProductCard = false;
-          this.loader.hide();
+          this.isLoading = false;
         },
       });
     }
@@ -188,7 +193,13 @@ export class HomePageComponent {
   }
 
   allowOnlyNumbers(event: KeyboardEvent): void {
-    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'];
+    const allowedKeys = [
+      'Backspace',
+      'ArrowLeft',
+      'ArrowRight',
+      'Tab',
+      'Delete',
+    ];
     if (!/^\d$/.test(event.key) && !allowedKeys.includes(event.key)) {
       event.preventDefault();
     }
@@ -208,74 +219,97 @@ export class HomePageComponent {
 
   addToCart() {
     if (this.userInfo == null) {
-      this.api.logout()
+      this.api.logout();
     } else {
-      this.loader.show();
       const currentCount = this.cartService.getCartCount();
-      this.api.addToCart(this.userInfo.emailId, this.productDetails, this.quantity, false).subscribe({
-        next: (response) => {
-          if (!response.success) {
-            const existingQuantity = response.cart.items.find(
-              (item: any) => item.product.sku === this.productDetails.sku
-            )?.quantity || 0;
-            this.loader.hide();
+      this.api
+        .addToCart(
+          this.userInfo.emailId,
+          this.productDetails,
+          this.quantity,
+          false
+        )
+        .subscribe({
+          next: (response) => {
+            if (!response.success) {
+              const existingQuantity =
+                response.cart.items.find(
+                  (item: any) => item.product.sku === this.productDetails.sku
+                )?.quantity || 0;
 
-            this.confirmationMessage = `The product "${this.productDetails.sku}" already has a quantity of ${existingQuantity} in the cart. Do you want to add the selected quantity ${this.quantity} to this?`;
-            const dialogRef = this.dialog.open(this.confirmDialog, {
-              id: 'confirm-dialog'
-            });
+              this.confirmationMessage = `The product "${this.productDetails.sku}" already has a quantity of ${existingQuantity} in the cart. Do you want to add the selected quantity ${this.quantity} to this?`;
+              const dialogRef = this.dialog.open(this.confirmDialog, {
+                id: 'confirm-dialog',
+              });
 
-            dialogRef.afterClosed().subscribe((confirmed) => {
-              console.log('Dialog closed. User confirmed:', confirmed);
-              if (confirmed) {
-                this.loader.show()
-                this.api.addToCart(this.userInfo.emailId, this.productDetails, this.quantity, true).subscribe({
-                  next: (finalResponse) => {
-                    this.showProductCard = false;
-                    this.skuCode = '';
-                    this.loader.hide()
-                    this.snackBar.open(finalResponse.message, 'Close', {
-                      duration: 3000,
-                      verticalPosition: 'bottom',
-                      horizontalPosition: 'center',
+              dialogRef.afterClosed().subscribe((confirmed) => {
+                console.log('Dialog closed. User confirmed:', confirmed);
+                if (confirmed) {
+                  this.api
+                    .addToCart(
+                      this.userInfo.emailId,
+                      this.productDetails,
+                      this.quantity,
+                      true
+                    )
+                    .subscribe({
+                      next: (finalResponse) => {
+                        this.showProductCard = false;
+                        this.skuCode = '';
+                        this.snackBar.open(finalResponse.message, 'Close', {
+                          duration: 3000,
+                          verticalPosition: 'bottom',
+                          horizontalPosition: 'center',
+                        });
+                      },
+                      error: (error) => {
+                        console.error(
+                          'Error adding to cart after confirmation:',
+                          error
+                        );
+                        this.snackBar.open(
+                          'Error adding item to the cart.',
+                          'Close',
+                          {
+                            duration: 3000,
+                            verticalPosition: 'bottom',
+                            horizontalPosition: 'center',
+                            panelClass: ['error-snackbar'],
+                          }
+                        );
+                      },
                     });
-                  },
-                  error: (error) => {
-                    this.loader.hide();
-                    console.error('Error adding to cart after confirmation:', error);
-                    this.snackBar.open('Error adding item to the cart.', 'Close', {
-                      duration: 3000,
-                      panelClass: ['error-snackbar']
-                    });
-                  }
-                });
-              } else {
-                console.log('User canceled the addition.');
+                } else {
+                  console.log('User canceled the addition.');
+                }
+              });
+            } else {
+              this.showProductCard = false;
+              const updatedCount = currentCount + 1;
+              this.cartService.updateCartCount(updatedCount);
+              this.skuCode = '';
+              this.snackBar.open(response.message, 'Close', {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: ['success-snackbar'],
+              });
+            }
+          },
+          error: (error) => {
+            console.error('Error adding to cart:', error);
+            this.snackBar.open(
+              'An error occurred while adding the product.',
+              'Close',
+              {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: ['error-snackbar'],
               }
-            });
-          } else {
-            this.loader.hide();
-            this.showProductCard = false;
-            const updatedCount = currentCount + 1;
-            this.cartService.updateCartCount(updatedCount)
-            this.skuCode = '';
-            this.snackBar.open(response.message, 'Close', {
-              duration: 3000,
-              verticalPosition: 'bottom',
-              horizontalPosition: 'center',
-              panelClass: ['success-snackbar']
-            });
-          }
-        },
-        error: (error) => {
-          console.error('Error adding to cart:', error);
-          this.loader.hide();
-          this.snackBar.open('An error occurred while adding the product.', 'Close', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
-        }
-      });
+            );
+          },
+        });
     }
   }
 

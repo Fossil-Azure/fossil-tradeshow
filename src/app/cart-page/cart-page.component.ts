@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-cart-page',
   templateUrl: './cart-page.component.html',
-  styleUrl: './cart-page.component.css'
+  styleUrl: './cart-page.component.css',
 })
 export class CartPageComponent {
   isMobile: boolean = false;
@@ -25,7 +25,7 @@ export class CartPageComponent {
     SGD: 'S$',
     HKD: 'HK$',
     JPY: '¥',
-    AUD: 'A$'
+    AUD: 'A$',
   };
   cartItems: any[] = [];
   confirmationMessage: any;
@@ -40,13 +40,21 @@ export class CartPageComponent {
 
   @ViewChild('duplicateDialog')
   duplicateDialog!: TemplateRef<any>;
+  isLoading: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private router: Router, private api: ApiCallingService,
-    private loader: LoaderServiceService, private snackBar: MatSnackBar, private cartService: CartserviceService,
-    private dialog: MatDialog) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private router: Router,
+    private api: ApiCallingService,
+    private loader: LoaderServiceService,
+    private snackBar: MatSnackBar,
+    private cartService: CartserviceService,
+    private dialog: MatDialog
+  ) {
     // Observe screen size changes using BreakpointObserver
-    this.breakpointObserver.observe([Breakpoints.Handset])
-      .subscribe(result => {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe((result) => {
         this.isMobile = result.matches;
       });
 
@@ -62,7 +70,7 @@ export class CartPageComponent {
   }
 
   fetchCart(): void {
-    this.loader.show()
+    this.isLoading = true;
     this.api.getCart(this.userInfo.emailId).subscribe({
       next: (response) => {
         if (response) {
@@ -73,15 +81,15 @@ export class CartPageComponent {
             sku: item.product.sku,
             brand: item.product.brand,
             price: this.getProductPrice(item.product),
-            quantity: item.quantity
+            quantity: item.quantity,
           }));
         }
-        this.loader.hide()
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching cart:', error);
-        this.loader.hide()
-      }
+        this.isLoading = false;
+      },
     });
   }
 
@@ -119,21 +127,6 @@ export class CartPageComponent {
     }, 0);
   }
 
-  get totalPrice(): number {
-    if (!this.cartItems || this.cartItems.length === 0) {
-      return 0;
-    }
-
-    const total = this.cartItems.reduce((sum: number, item: any) => {
-      const price = item.price || 0;
-      const quantity = item.quantity || 0;
-      return sum + price * quantity;
-    }, 0);
-
-    return parseFloat(total.toFixed(2));
-  }
-
-
   updateSubtotal(item: any): void {
     item.subtotal = item.price * item.quantity;
   }
@@ -142,31 +135,48 @@ export class CartPageComponent {
     const emailId = this.userInfo.emailId;
     const sku = item.sku;
     const currentCount = this.cartService.getCartCount();
-    this.confirmationMessage = `Are you sure you want to remove "${item.name}" from your cart?`
+    this.confirmationMessage = `Are you sure you want to remove "${item.name}" from your cart?`;
     const dialogRef = this.dialog.open(this.confirmDialog, {
       id: 'confirm-dialog',
-      width: "500px"
+      width: '500px',
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.isLoading = true;
         this.api.removeItem(emailId, sku).subscribe({
           next: () => {
-            this.cartItems = this.cartItems.filter((cartItem: { sku: any; }) => cartItem.sku !== sku);
+            this.cartItems = this.cartItems.filter(
+              (cartItem: { sku: any }) => cartItem.sku !== sku
+            );
             const updatedCount = currentCount - 1;
-            this.cartService.updateCartCount(updatedCount)
-            this.snackBar.open(`"${item.name}" has been removed from your cart.`, 'Close', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
+            this.cartService.updateCartCount(updatedCount);
+            this.isLoading = false;
+            this.snackBar.open(
+              `"${item.name}" has been removed from your cart.`,
+              'Close',
+              {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: ['success-snackbar'],
+              }
+            );
           },
           error: (error) => {
             console.error('Error removing item from cart:', error);
-            this.snackBar.open('An error occurred while trying to remove the item.', 'Close', {
-              duration: 3000,
-              panelClass: ['error-snackbar']
-            });
-          }
+            this.isLoading = false;
+            this.snackBar.open(
+              'An error occurred while trying to remove the item.',
+              'Close',
+              {
+                duration: 3000,
+                verticalPosition: 'bottom',
+                horizontalPosition: 'center',
+                panelClass: ['error-snackbar'],
+              }
+            );
+          },
         });
       }
     });
@@ -185,14 +195,20 @@ export class CartPageComponent {
   proceedToCheckout(): void {
     const dialogRef = this.dialog.open(this.placeOrder, {
       id: 'place-order-dialog',
-      width: "500px"
+      width: '500px',
     });
   }
 
   validateQuantity(item: any): void {
-    if (!item.quantity || item.quantity < 1) {
-      item.quantity = 1; // Reset invalid input
+    const value = parseInt(item.quantity, 10);
+
+    if (!value || value < 1) {
+      item.quantity = 1;
+    } else {
+      item.quantity = value;
     }
+
+    this.updateQuantity(item, item.quantity);
   }
 
   rateProduct(star: number): void {
@@ -211,32 +227,60 @@ export class CartPageComponent {
     this.router.navigate(['/tradeshow/home']);
   }
 
+  get totalPrice(): number {
+    if (!this.cartItems || this.cartItems.length === 0) {
+      return 0;
+    }
+
+    const total = this.cartItems.reduce((sum: number, item: any) => {
+      const price = item.price || 0;
+      const quantity = item.quantity || 0;
+      return sum + price * quantity;
+    }, 0);
+
+    return parseFloat(total.toFixed(2));
+  }
+
   updateQuantity(item: any, newQuantity: number): void {
     if (newQuantity < 1) {
       this.snackBar.open('Quantity cannot be less than 1.', 'Close', {
         duration: 3000,
-        panelClass: ['error-snackbar']
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
+        panelClass: ['error-snackbar'],
       });
       return;
     }
-
-    this.api.updateCartItemQuantity(this.userInfo.emailId, item.sku, newQuantity).subscribe({
-      next: (response) => {
-        // Update the local cart item quantity
-        item.quantity = newQuantity;
-        this.snackBar.open(`Quantity updated to ${newQuantity} for SKU ${item.sku}.`, 'Close', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
-        });
-      },
-      error: (error) => {
-        console.error('Error updating quantity:', error);
-        this.snackBar.open('Failed to update quantity.', 'Close', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
-      }
-    });
+    this.isLoading = true;
+    this.api
+      .updateCartItemQuantity(this.userInfo.emailId, item.sku, newQuantity)
+      .subscribe({
+        next: (response) => {
+          // Update the local cart item quantity
+          item.quantity = newQuantity;
+          this.isLoading = false;
+          this.snackBar.open(
+            `Quantity updated to ${newQuantity} for SKU ${item.sku}.`,
+            'Close',
+            {
+              duration: 3000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'center',
+              panelClass: ['success-snackbar'],
+            }
+          );
+        },
+        error: (error) => {
+          console.error('Error updating quantity:', error);
+          this.isLoading = false;
+          this.snackBar.open('Failed to update quantity.', 'Close', {
+            duration: 3000,
+            verticalPosition: 'bottom',
+            horizontalPosition: 'center',
+            panelClass: ['error-snackbar'],
+          });
+        },
+      });
   }
 
   decreaseQuantity(item: any): void {
@@ -254,56 +298,153 @@ export class CartPageComponent {
     this.dialog.getDialogById('confirm-dialog')?.close();
   }
 
-  confirmOrder(): void {
-    this.dialog.closeAll();
-    this.dialog.getDialogById('confirm-dialog')?.close();
+  createOrderPayload(): void {
+    const totalUsd = this.items.items.reduce(
+      (sum: number, item: { product: { mrpUsd: number }; quantity: number }) =>
+        sum + item.product.mrpUsd * item.quantity,
+      0
+    );
+    const totalInr = this.items.items.reduce(
+      (sum: number, item: { product: { mrpInr: number }; quantity: number }) =>
+        sum + item.product.mrpInr * item.quantity,
+      0
+    );
+    const totalSgd = this.items.items.reduce(
+      (sum: number, item: { product: { mrpSgd: number }; quantity: number }) =>
+        sum + item.product.mrpSgd * item.quantity,
+      0
+    );
+    const totalHkd = this.items.items.reduce(
+      (sum: number, item: { product: { mrpHkd: number }; quantity: number }) =>
+        sum + item.product.mrpHkd * item.quantity,
+      0
+    );
+    const totalJpy = this.items.items.reduce(
+      (sum: number, item: { product: { mrpJpy: number }; quantity: number }) =>
+        sum + item.product.mrpJpy * item.quantity,
+      0
+    );
+    const totalAud = this.items.items.reduce(
+      (sum: number, item: { product: { mrpAud: number }; quantity: number }) =>
+        sum + item.product.mrpAud * item.quantity,
+      0
+    );
+
     const order = {
       emailId: this.userInfo.emailId,
       items: this.items.items,
-      totalAmount: this.totalPrice
+      totalUsd: totalUsd.toFixed(2),
+      totalInr: totalInr.toFixed(2),
+      totalSgd: totalSgd.toFixed(2),
+      totalHkd: totalHkd.toFixed(2),
+      totalJpy: totalJpy.toFixed(2),
+      totalAud: totalAud.toFixed(2),
     };
+  }
+
+  confirmOrder(): void {
+    this.dialog.closeAll();
+    this.dialog.getDialogById('confirm-dialog')?.close();
+    // Calculate total prices for each currency
+    const totalUsd = this.items.items.reduce(
+      (sum: any, item: any) => sum + item.product.mrpUsd * item.quantity,
+      0
+    );
+    const totalInr = this.items.items.reduce(
+      (sum: any, item: any) => sum + item.product.mrpInr * item.quantity,
+      0
+    );
+    const totalSgd = this.items.items.reduce(
+      (sum: any, item: any) => sum + item.product.mrpSgd * item.quantity,
+      0
+    );
+    const totalHkd = this.items.items.reduce(
+      (sum: any, item: any) => sum + item.product.mrpHkd * item.quantity,
+      0
+    );
+    const totalJpy = this.items.items.reduce(
+      (sum: any, item: any) => sum + item.product.mrpJpy * item.quantity,
+      0
+    );
+    const totalAud = this.items.items.reduce(
+      (sum: any, item: any) => sum + item.product.mrpAud * item.quantity,
+      0
+    );
+
+    const order = {
+      emailId: this.userInfo.emailId,
+      items: this.items.items,
+      totalUsd: totalUsd.toFixed(2),
+      totalInr: totalInr.toFixed(2),
+      totalSgd: totalSgd.toFixed(2),
+      totalHkd: totalHkd.toFixed(2),
+      totalJpy: totalJpy.toFixed(2),
+      totalAud: totalAud.toFixed(2),
+    };
+
+    this.isLoading = true;
 
     this.api.placeOrder(order, false).subscribe({
       next: (response) => {
         this.cartItems = [];
-        this.cartService.updateCartCount(0)
-        console.log("Order placed successfully:", response);
+        this.cartService.updateCartCount(0);
+        console.log('Order placed successfully:', response);
+        this.isLoading = false;
         this.snackBar.open(`Order placed successfully`, 'Close', {
           duration: 3000,
-          panelClass: ['success-snackbar']
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center',
+          panelClass: ['success-snackbar'],
+        });
+        console.log(response);
+
+        // Redirect to order-confirmation page with order details
+        this.router.navigate(['tradeshow/order-confirmation'], {
+          state: { orderDetails: response },
         });
       },
       error: (error) => {
+        this.isLoading = false;
         if (error.status === 409) {
           this.duplicateOrder = `Some items in your cart were already ordered. Do you want to continue?`;
           const dialogRef = this.dialog.open(this.duplicateDialog, {
-            id: 'duplicate-dialog'
+            id: 'duplicate-dialog',
           });
 
           dialogRef.afterClosed().subscribe((confirmed) => {
             if (confirmed) {
+              this.isLoading = true;
               this.api.placeOrder(order, true).subscribe({
                 next: (confirmedResponse) => {
-                  console.log("Order confirmed successfully:", confirmedResponse);
+                  this.isLoading = false;
                   this.snackBar.open(`Order placed successfully`, 'Close', {
                     duration: 3000,
-                    panelClass: ['success-snackbar']
+                    verticalPosition: 'bottom',
+                    horizontalPosition: 'center',
+                    panelClass: ['success-snackbar'],
                   });
                   this.dialog.closeAll();
                   this.dialog.getDialogById('confirm-dialog')?.close();
                   this.cartItems = [];
-                  this.cartService.updateCartCount(0)
+                  this.cartService.updateCartCount(0);
+                  console.log("Confirmed Responce: ", confirmedResponse);
+                  // Redirect to order-confirmation page with order details
+                  this.router.navigate(['tradeshow/order-confirmation'], {
+                    state: { orderDetails: confirmedResponse },
+                  });
                 },
                 error: (confirmError) => {
-                  console.error("Error confirming order:", confirmError);
-                }
+                  this.isLoading = false;
+                  console.error('Error confirming order:', confirmError);
+                },
               });
             }
           });
         } else {
-          console.error("Error placing order:", error);
+          this.isLoading = false;
+          console.error('Error placing order:', error);
         }
-      }
+      },
     });
   }
 }

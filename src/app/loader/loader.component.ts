@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LoaderServiceService } from '../../shared/loader/loader-service.service';
 
 @Component({
@@ -7,11 +7,5 @@ import { LoaderServiceService } from '../../shared/loader/loader-service.service
   styleUrl: './loader.component.css'
 })
 export class LoaderComponent {
-  isLoading: boolean = false;
-
-  constructor(private loaderService: LoaderServiceService) {
-    this.loaderService.isLoading.subscribe((value) => {
-      this.isLoading = value;
-    });
-  }
+  @Input() isLoading: boolean = false;
 }

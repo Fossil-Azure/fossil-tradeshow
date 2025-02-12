@@ -24,6 +24,7 @@ export class LayoutComponent {
   userInfo: any;
   userCurrency: any;
   badgeCount = 0;
+  isLoading: boolean = false;
 
   constructor(private breakpointObserver: BreakpointObserver, private router: Router, private api: ApiCallingService,
     private loader: LoaderServiceService, private cartService: CartserviceService) {
@@ -53,18 +54,18 @@ export class LayoutComponent {
   }
 
   fetchCart(): void {
-    this.loader.show()
+    this.isLoading = true;
     this.api.getCart(this.userInfo.emailId).subscribe({
       next: (response) => {
         if(response) {
           this.badgeCount = response.items.length
           this.cartService.updateCartCount(this.badgeCount);
+          this.isLoading = false;
         }
-        this.loader.hide()
       },
       error: (error) => {
         console.error('Error fetching cart:', error);
-        this.loader.hide()
+        this.isLoading = false;
       }
     });
   }

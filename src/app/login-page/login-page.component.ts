@@ -14,6 +14,7 @@ export class LoginPageComponent {
   loginForm: FormGroup;
   hidePassword = true; // Control the password visibility
   errorMessage: string | null = null;
+  isLoading: boolean = false;
 
   constructor(private fb: FormBuilder, private api: ApiCallingService, 
     private router: Router, private loader: LoaderServiceService, private snackBar: MatSnackBar) {
@@ -45,23 +46,23 @@ export class LoginPageComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.loader.show()
+      this.isLoading = true;
       const { email, password } = this.loginForm.value;
       this.api.login(email, password).subscribe({
         next: (response) => {
           // Save the token and redirect to the dashboard
           this.api.saveToken(response);
+          this.isLoading = false;
           this.router.navigate(['/tradeshow/home']);
-          this.loader.hide();
         },
         error: (error) => {
           // Handle login error
+          this.isLoading = false;
           this.errorMessage = 'Invalid username or password';
           if(error.error == "Invalid credentials")
             this.showErrorPopup('Invalid credentials. Please try again.');
           else if(error.error == "User not found")
             this.showErrorPopup('User not found');
-          this.loader.hide();
         },
       });
     }

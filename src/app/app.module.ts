@@ -81,7 +81,9 @@ export function checkToken(authService: ApiCallingService): () => void {
     LoginPageComponent,
     HomePageComponent,
     LayoutComponent,
-    CartPageComponent
+    CartPageComponent,
+    LoaderComponent,
+    OrderConfirmationComponent
   ]
 })
 export class AppModule { }
