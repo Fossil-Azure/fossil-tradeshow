@@ -1,0 +1,408 @@
+/* General container styling */
+.orders-container {
+  padding: 20px;
+  margin: auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+}
+
+/* Scrollbar customization */
+.orders-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.orders-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+.orders-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.orders-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Order list styling */
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual order card styling */
+.order-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Order header styling */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+/* Status badge */
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.status.processing {
+  background-color: #ff9800;
+}
+
+.status.shipped {
+  background-color: #2196f3;
+}
+
+.status.delivered {
+  background-color: #4caf50;
+}
+
+/* Order details text */
+.order-details p {
+  margin: 5px 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+/* No orders message */
+.no-orders {
+  text-align: center;
+  color: #777;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+/* Button styling */
+.view-details-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.view-details-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.back-btn {
+  background-color: #ffb700;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #b38600;
+}
+
+/* Order details section */
+.order-details {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  height: 84vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.item-card-container {
+  overflow-y: auto;
+  max-height: 70vh;
+  padding-right: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.order-details h3 {
+  margin-bottom: 10px;
+  color: #000000;
+  font-size: 1.4rem;
+}
+
+/* Item card inside order details */
+.item-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  background: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: background 0.3s ease;
+}
+
+.item-card:last-child {
+  border-bottom: none;
+}
+
+.item-card:hover {
+  background: #ffffff;
+}
+
+.product-image {
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-info h4 {
+  margin: 5px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.item-info p {
+  margin: 3px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.item-card-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.item-card-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+.item-card-container::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.item-card-container::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.edit-btn {
+  background-color: #1976d2;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #1565c0;
+}
+
+.save-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #388e3c;
+}
+
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Optional: Button Hover Effects */
+button[mat-mini-fab]:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.remove-item-btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.remove-item-btn {
+  background-color: #ff4d4d;
+  color: white;
+  margin-top: 8px;
+}
+
+.remove-item-btn:hover {
+  opacity: 0.85;
+}
+
+/* Quantity Editor */
+.quantity-editor {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 5px 0;
+}
+
+.quantity-editor button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quantity-editor button:hover {
+  background-color: #0056b3;
+}
+
+.quantity-editor input {
+  width: 50px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cancel-btn,
+.confirm-btn {
+  padding: 10px 20px;
+  font-size: 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  display: inline-block;
+  margin: 10px 5px;
+}
+
+.cancel-btn {
+  background: #6c757d; /* Soft gray color */
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #545b62; /* Darker gray on hover */
+  transform: scale(1.15);
+}
+
+.confirm-btn {
+  background: #dc3545; /* Red warning color */
+  color: white;
+}
+
+.confirm-btn:hover {
+  background: #c82333;
+  transform: scale(1.15); /* Darker red on hover */
+}
+
+.confirm-btn:active {
+  transform: scale(0.95); /* Slight shrink effect on click */
+}
+
+.dialog-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+}
+
+/* Changes Table */
+.changes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.changes-table th,
+.changes-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.changes-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  color: #333;
+}
+
+.changes-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.changes-table tr:hover {
+  background-color: #f1f1f1;
+  transition: 0.3s;
+}
+
+.added {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.updated {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.removed {
+  color: #dc3545;
+  font-weight: bold;
+}

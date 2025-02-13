@@ -26,6 +26,7 @@ import { JwtInterceptor } from '../shared/Interceptor/jwt.interceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatBadgeModule } from '@angular/material/badge';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 export function checkToken(authService: ApiCallingService): () => void {
   return () => {
@@ -56,7 +57,8 @@ export function checkToken(authService: ApiCallingService): () => void {
     LayoutComponent,
     CartPageComponent,
     LoaderComponent,
-    OrderConfirmationComponent
+    OrderConfirmationComponent,
+    MyOrdersComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +85,8 @@ export function checkToken(authService: ApiCallingService): () => void {
     LayoutComponent,
     CartPageComponent,
     LoaderComponent,
-    OrderConfirmationComponent
+    OrderConfirmationComponent,
+    MyOrdersComponent
   ]
 })
 export class AppModule { }

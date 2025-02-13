@@ -5,6 +5,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { AuthGuard } from '../shared/Interceptor/auth.guard';
 import { CartPageComponent } from './cart-page/cart-page.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -15,12 +16,13 @@ export const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomePageComponent },
       { path: 'cart', component: CartPageComponent },
-      { path: 'order-confirmation', component: OrderConfirmationComponent}
+      { path: 'order-confirmation', component: OrderConfirmationComponent },
+      { path: 'my-orders', component: MyOrdersComponent },
     ],
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
   },
   // Redirect any unknown paths
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
 ];
 
 export const AppRoutes = RouterModule.forRoot(routes);
