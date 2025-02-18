@@ -33,7 +33,6 @@ export class LayoutComponent {
     this.breakpointObserver.observe([Breakpoints.Handset])
       .subscribe(result => {
         this.isMobile = result.matches;
-        console.log(this.isMobile)
         if (this.isMobile) {
           this.isExpanded = false; // Collapse sidenav on small screens
           this.showMobileMenu = false; // Hide mobile menu initially

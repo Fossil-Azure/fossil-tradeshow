@@ -388,7 +388,6 @@ export class CartPageComponent {
       next: (response) => {
         this.cartItems = [];
         this.cartService.updateCartCount(0);
-        console.log('Order placed successfully:', response);
         this.isLoading = false;
         this.snackBar.open(`Order placed successfully`, 'Close', {
           duration: 3000,
@@ -396,7 +395,6 @@ export class CartPageComponent {
           horizontalPosition: 'center',
           panelClass: ['success-snackbar'],
         });
-        console.log(response);
 
         // Redirect to order-confirmation page with order details
         this.router.navigate(['tradeshow/order-confirmation'], {
@@ -427,7 +425,6 @@ export class CartPageComponent {
                   this.dialog.getDialogById('confirm-dialog')?.close();
                   this.cartItems = [];
                   this.cartService.updateCartCount(0);
-                  console.log("Confirmed Responce: ", confirmedResponse);
                   // Redirect to order-confirmation page with order details
                   this.router.navigate(['tradeshow/order-confirmation'], {
                     state: { orderDetails: confirmedResponse },

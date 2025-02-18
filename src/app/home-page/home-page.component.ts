@@ -122,7 +122,7 @@ export class HomePageComponent {
 
   // Handle QR code result
   handleQrCodeResult(result: string) {
-    this.skuCode = result; // Fill the input field with scanned text
+    this.skuCode = result.toUpperCase(); // Fill the input field with scanned text
     this.closeScanner();
   }
 
@@ -147,7 +147,7 @@ export class HomePageComponent {
     this.quantity = 1;
     if (this.skuControl.valid) {
       this.notFound = false;
-      this.api.getProduct(this.skuCode).subscribe({
+      this.api.getProduct(this.skuCode.toUpperCase()).subscribe({
         next: (response) => {
           this.productDetails = response;
           const price = this.getProductPrice();
@@ -243,7 +243,6 @@ export class HomePageComponent {
               });
 
               dialogRef.afterClosed().subscribe((confirmed) => {
-                console.log('Dialog closed. User confirmed:', confirmed);
                 if (confirmed) {
                   this.api
                     .addToCart(

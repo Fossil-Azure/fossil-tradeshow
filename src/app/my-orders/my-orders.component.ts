@@ -2,6 +2,7 @@ import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ApiCallingService } from '../../shared/API/api-calling.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-orders',
@@ -27,7 +28,8 @@ export class MyOrdersComponent {
   constructor(
     private api: ApiCallingService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {
     const user = localStorage.getItem('user');
     if (user) {
@@ -58,8 +60,12 @@ export class MyOrdersComponent {
   }
 
   // Toggle Edit Mode
-  toggleEditMode() {
-    this.selectedOrder = JSON.parse(JSON.stringify(this.orderCopy));
+  toggleEditMode(order: any) {
+    if (order) {
+      this.selectedOrder = order;
+    } else {
+      this.selectedOrder = JSON.parse(JSON.stringify(this.orderCopy));
+    }
     this.isEditMode = !this.isEditMode;
   }
 
@@ -129,7 +135,6 @@ export class MyOrdersComponent {
   }
 
   viewOrderDetails(order: any) {
-    console.log(order);
     this.selectedOrder = order;
     this.orderCopy = JSON.parse(JSON.stringify(order));
   }
@@ -175,13 +180,34 @@ export class MyOrdersComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      this.isLoading = true;
       if (result) {
-        console.log('Order Updated');
+        this.api.updateOrder(this.selectedOrder).subscribe({
+          next: (response) => {
+            this.backToOrders()
+            this.fetchOrders()
+            this.isLoading = false;
+            this.snackBar.open(`Order Updated Successfully`, 'Close', {
+              duration: 2000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'center',
+              panelClass: ['success-snackbar'],
+            });
+          },
+          error: (error) => {
+            this.isLoading = false;
+            this.snackBar.open(`Something went wrong`, 'Close', {
+              duration: 2000,
+              verticalPosition: 'bottom',
+              horizontalPosition: 'center',
+              panelClass: ['success-snackbar'],
+            });
+          },
+        });
       } else {
-        console.log('Not Updated');
+        this.toggleEditMode(this.selectedOrder);
       }
     });
-    console.log(this.selectedOrder);
   }
 
   hasUpdatedChanges(): boolean {
@@ -196,7 +222,6 @@ export class MyOrdersComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('Order Deleted:', orderId);
         this.isEditMode = false;
         this.selectedOrder = null;
         this.snackBar.open(`Order Deleted Successfully`, 'Close', {

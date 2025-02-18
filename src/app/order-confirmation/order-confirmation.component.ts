@@ -66,8 +66,6 @@ export class OrderConfirmationComponent {
       price: this.getProductPrice(item.product),
       quantity: item.quantity,
     }));
-
-    console.log(this.orderDetails)
   }
 
   ngOnInit() {

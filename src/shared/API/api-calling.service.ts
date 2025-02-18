@@ -94,4 +94,8 @@ export class ApiCallingService {
   placeOrder(order: any, confirm: boolean): Observable<any> {
     return this.http.post(`${this.order}/place?confirm=${confirm}`, order);
   }
+
+  updateOrder(order: any): Observable<any> {
+    return this.http.put(`${this.order}/update/${order.id}`, order);
+  }
 }
