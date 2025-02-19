@@ -6,11 +6,10 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment.prod';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiCallingService {
-
-  private baseUrl = "http://localhost:8080";
+  private baseUrl = 'http://localhost:8080';
   // private baseUrl = environment.apiUrl;
 
   private loginUrl = `${this.baseUrl}/api/auth/login`;
@@ -18,7 +17,7 @@ export class ApiCallingService {
   private cart = `${this.baseUrl}/cart`;
   private order = `${this.baseUrl}/orders`;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {}
 
   // Send login credentials to the backend
   login(emailId: string, password: string): Observable<any> {
@@ -66,13 +65,29 @@ export class ApiCallingService {
     return this.http.post(this.findProduct, { searchValue });
   }
 
-  addToCart(emailId: string, product: any, quantity: number, confirmAddition: boolean): Observable<any> {
+  addToCart(
+    emailId: string,
+    product: any,
+    quantity: number,
+    confirmAddition: boolean
+  ): Observable<any> {
     const requestBody = {
       product,
       quantity,
-      confirmAddition
+      confirmAddition,
     };
     return this.http.post(`${this.cart}/${emailId}/add`, requestBody);
+  }
+
+  bulkAddToCart(
+    emailId: string,
+    cartItems: any,
+    confirmAddition: boolean = false
+  ): Observable<any> {
+    return this.http.post(
+      `${this.cart}/${emailId}/add-bulk?confirmAddition=${confirmAddition}`,
+      cartItems
+    );
   }
 
   getCart(emailId: string): Observable<any> {
@@ -83,8 +98,15 @@ export class ApiCallingService {
     return this.http.delete<void>(`${this.cart}/${emailId}/item/${sku}`);
   }
 
-  updateCartItemQuantity(emailId: string, sku: string, quantity: number): Observable<any> {
-    return this.http.put(`${this.cart}/${emailId}/item/${sku}/quantity/${quantity}`, {});
+  updateCartItemQuantity(
+    emailId: string,
+    sku: string,
+    quantity: number
+  ): Observable<any> {
+    return this.http.put(
+      `${this.cart}/${emailId}/item/${sku}/quantity/${quantity}`,
+      {}
+    );
   }
 
   getUsersOrders(emailId: string): Observable<any> {

@@ -6,6 +6,7 @@ import { LoaderServiceService } from '../../shared/loader/loader-service.service
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CartserviceService } from '../../shared/CartService/cartservice.service';
 import { MatDialog } from '@angular/material/dialog';
+import { response } from 'express';
 
 @Component({
   selector: 'app-cart-page',
@@ -193,6 +194,14 @@ export class CartPageComponent {
   }
 
   proceedToCheckout(): void {
+    this.api.getCart(this.userInfo.emailId).subscribe({
+      next: (response) => {
+        this.items = response;
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
     const dialogRef = this.dialog.open(this.placeOrder, {
       id: 'place-order-dialog',
       width: '500px',
