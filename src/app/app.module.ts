@@ -27,6 +27,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatBadgeModule } from '@angular/material/badge';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 export function checkToken(authService: ApiCallingService): () => void {
   return () => {
@@ -58,7 +59,8 @@ export function checkToken(authService: ApiCallingService): () => void {
     CartPageComponent,
     LoaderComponent,
     OrderConfirmationComponent,
-    MyOrdersComponent
+    MyOrdersComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,

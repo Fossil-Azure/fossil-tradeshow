@@ -338,13 +338,13 @@ button[mat-mini-fab]:hover {
 }
 
 .confirm-btn {
-  background: #dc3545; /* Red warning color */
-  /* color: white; */
-  background-color: #dcdcdc;
+  background: #ffffff; /* Red warning color */
+  background-color: #3549dc;
+  color: white;
 }
 
 .confirm-btn:hover {
-  background: #c82333;
+  background: #253be7;
   transform: scale(1.15); /* Darker red on hover */
 }
 
@@ -393,17 +393,24 @@ button[mat-mini-fab]:hover {
   transition: 0.3s;
 }
 
-.added {
-  color: #007bff;
+/* Green for Increased Quantity */
+.increase {
+  color: green;
+  font-weight: bold;
+}
+
+/* Red for Decreased Quantity */
+.decrease {
+  color: rgb(206, 104, 104);
   font-weight: bold;
 }
 
 .updated {
-  color: #ff9800;
+  color: #007bff;
   font-weight: bold;
 }
 
 .removed {
-  color: #dc3545;
+  color: #ff0019;
   font-weight: bold;
 }

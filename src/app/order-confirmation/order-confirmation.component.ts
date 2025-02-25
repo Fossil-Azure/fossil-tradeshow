@@ -2,6 +2,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiCallingService } from '../../shared/API/api-calling.service';
+import { CartserviceService } from '../../shared/CartService/cartservice.service';
 
 @Component({
   selector: 'app-order-confirmation',
@@ -41,7 +42,12 @@ export class OrderConfirmationComponent {
     AUD: 'A$',
   };
 
-  constructor(private router: Router, private api: ApiCallingService) {
+  constructor(
+    private router: Router,
+    api: ApiCallingService,
+    private cartService: CartserviceService
+  ) {
+    this.cartService.fetchCart();
     const user = localStorage.getItem('user');
     if (user) {
       this.userInfo = JSON.parse(user);
@@ -50,14 +56,14 @@ export class OrderConfirmationComponent {
       this.userInfo = null;
       api.logout();
     }
-    
+
     const navigation = this.router.getCurrentNavigation();
     this.orderDetails = navigation?.extras?.state?.['orderDetails'] ?? null;
 
-    if(!this.orderDetails) {
+    if (!this.orderDetails) {
       this.router.navigate(['tradeshow/home']);
     }
-    
+
     this.orderDetails = this.orderDetails.items.map((item: any) => ({
       image: item.product.imageUrl,
       name: item.product.productTitle,

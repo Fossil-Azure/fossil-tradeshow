@@ -59,6 +59,8 @@ export class CartPageComponent {
         this.isMobile = result.matches;
       });
 
+    this.cartService.fetchCart();
+
     const user = localStorage.getItem('user');
     if (user) {
       this.userInfo = JSON.parse(user);
@@ -199,9 +201,9 @@ export class CartPageComponent {
         this.items = response;
       },
       error: (err) => {
-        console.log(err)
-      }
-    })
+        console.log(err);
+      },
+    });
     const dialogRef = this.dialog.open(this.placeOrder, {
       id: 'place-order-dialog',
       width: '500px',

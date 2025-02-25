@@ -163,12 +163,35 @@
         <tbody>
           <tr *ngFor="let change of changes">
             <td>{{ change.product }}</td>
+
+            <!-- Updated Items: Show old and new quantity -->
             <td *ngIf="change.change === 'Updated'">
               {{ change.oldQuantity }}
             </td>
-            <td *ngIf="change.change === 'Updated'">
+            <td
+              *ngIf="change.change === 'Updated'"
+              [ngClass]="{
+                increase: change.newQuantity > change.oldQuantity,
+                decrease: change.newQuantity < change.oldQuantity
+              }"
+            >
               {{ change.newQuantity }}
             </td>
+
+            <!-- Unchanged Items: Span across columns -->
+            <td
+              *ngIf="change.change === 'Unchanged'"
+              colspan="2"
+              class="unchanged"
+            >
+              Unchanged
+            </td>
+
+            <!-- Removed Items: Span across columns, show old quantity as 'Removed' -->
+            <td *ngIf="change.change === 'Removed'" colspan="2" class="removed">
+              Removed (Old Quantity: {{ change.oldQuantity }})
+            </td>
+
             <td>
               <span
                 [ngClass]="{

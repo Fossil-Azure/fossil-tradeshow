@@ -6,9 +6,11 @@ import { AuthGuard } from '../shared/Interceptor/auth.guard';
 import { CartPageComponent } from './cart-page/cart-page.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
+  { path: 'welcome', component: WelcomeComponent},
   {
     path: 'tradeshow',
     component: LayoutComponent,

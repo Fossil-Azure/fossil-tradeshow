@@ -1,0 +1,69 @@
+<app-loader [isLoading]="isLoading"></app-loader>
+<div class="welcome-container">
+  <div class="welcome-card animate__animated animate__fadeIn">
+    <img
+      src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExejNjbzBjYTBvY2RvYjVtdmlwZ3hvemljc21qeGh2bWh0M2ttbXRkaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xUPGGDNsLvqsBOhuU0/giphy.gif"
+      alt="Welcome Image"
+      class="welcome-image"
+    />
+
+    <h4 class="animate__animated animate__zoomIn">
+      Welcome, <br />
+      {{ userName }}!
+    </h4>
+    <p>Welcome to the Fossil Group Tradeshow Platform!</p>
+    <p style="font-weight: bold;">Would you like to reset your default password?</p>
+
+    <!-- Reset Password Form -->
+    <form
+      (ngSubmit)="resetPassword()"
+      class="formContainer"
+      #passwordForm="ngForm"
+    >
+      <div class="form-group">
+        <input
+          type="password"
+          [(ngModel)]="newPassword"
+          name="newPassword"
+          required
+          placeholder="New Password"
+          class="input-field"
+          (input)="validatePasswords()"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+          placeholder="Confirm Password"
+          class="input-field"
+          (input)="validatePasswords()"
+        />
+      </div>
+
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="primary"
+          [ngClass]="{ enabled: isPasswordValid }"
+          [disabled]="!isPasswordValid"
+          class="btn"
+        >
+          Reset Password
+        </button>
+        <button
+          mat-button
+          color="accent"
+          (click)="skip()"
+          class="btn-secondary"
+        >
+          Skip
+        </button>
+      </div>
+
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+    </form>
+  </div>
+</div>

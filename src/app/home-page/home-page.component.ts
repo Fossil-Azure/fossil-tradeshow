@@ -2,11 +2,12 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { BarcodeFormat } from '@zxing/library';
 import { ApiCallingService } from '../../shared/API/api-calling.service';
-import { LoaderServiceService } from '../../shared/loader/loader-service.service';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CartserviceService } from '../../shared/CartService/cartservice.service';
+import { response } from 'express';
+import { error } from 'console';
 
 @Component({
   selector: 'app-home-page',
@@ -45,6 +46,7 @@ export class HomePageComponent {
   isLoading: boolean = false;
   showSize: boolean = false;
   sizeQuantities: number[] = [];
+  ratingPayload!: any;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -59,6 +61,8 @@ export class HomePageComponent {
       .subscribe((result) => {
         this.isMobile = result.matches;
       });
+
+    this.cartService.fetchCart();
 
     const user = localStorage.getItem('user');
     if (user) {
@@ -141,12 +145,16 @@ export class HomePageComponent {
     this.skuCode = '';
     this.notFound = false;
     this.showProductCard = false;
+    this.userRating = 0;
+    this.ratingPayload = null;
   }
 
   // Action to perform when text is entered or QR is scanned
   performAction(): void {
     this.isLoading = true;
     this.quantity = 1;
+    this.userRating = 0;
+    this.ratingPayload = null;
     if (this.skuControl.valid) {
       this.notFound = false;
       this.showSize = false;
@@ -249,152 +257,30 @@ export class HomePageComponent {
     }
   }
 
-  rateProduct(star: number): void {
-    this.userRating = star;
-  }
-
   setRating(rating: number): void {
-    this.userRating = rating; // Set the user's rating
+    this.userRating = rating;
+    this.ratingPayload = {
+      rating: this.userRating,
+      productSku: this.skuCode,
+      userId: this.userInfo.emailId,
+    };
   }
 
   hoverRating(rating: number): void {
     this.hoveredRating = rating; // Update the hovered rating
   }
 
-  // addToCart() {
-  //   if (this.userInfo == null) {
-  //     this.api.logout();
-  //   } else {
-  //     let cartRequests: any[] = [];
-
-  //     // If size variations are selected
-  //     if (this.showSize) {
-  //       this.productDetails.sizes.forEach((size: any, index: any) => {
-  //         const quantity = this.sizeQuantities[index];
-
-  //         if (quantity > 0) {
-  //           cartRequests.push({
-  //             emailId: this.userInfo.emailId,
-  //             product: {
-  //               ...this.productDetails,
-  //               sku: `${this.productDetails.sku}_${size}`,
-  //             },
-  //             quantity: quantity,
-  //             forceUpdate: false,
-  //           });
-  //         }
-  //       });
-  //       this.callCartApi(cartRequests);
-  //     } else {
-  //       cartRequests.push({
-  //         emailId: this.userInfo.emailId,
-  //         product: this.productDetails,
-  //         quantity: this.quantity,
-  //         forceUpdate: false,
-  //       });
-  //       this.callCartApi(cartRequests);
-  //     }
-  //   }
-  // }
-
-  // callCartApi(cartRequests: any) {
-  //   console.log(cartRequests);
-  //   cartRequests.forEach((element: any) => {
-  //     const currentCount = this.cartService.getCartCount();
-  //     this.api
-  //       .addToCart(
-  //         this.userInfo.emailId,
-  //         element.product,
-  //         element.quantity,
-  //         element.forceUpdate
-  //       )
-  //       .subscribe({
-  //         next: (response) => {
-  //           if (!response.success) {
-  //             const existingQuantity =
-  //               response.cart.items.find(
-  //                 (item: any) => item.product.sku === this.productDetails.sku
-  //               )?.quantity || 0;
-
-  //             this.confirmationMessage = `The product "${this.productDetails.sku}" already has a quantity of ${existingQuantity} in the cart. Do you want to add the selected quantity ${this.quantity} to this?`;
-  //             const dialogRef = this.dialog.open(this.confirmDialog, {
-  //               id: 'confirm-dialog',
-  //             });
-
-  //             dialogRef.afterClosed().subscribe((confirmed) => {
-  //               if (confirmed) {
-  //                 this.api
-  //                   .addToCart(
-  //                     this.userInfo.emailId,
-  //                     this.productDetails,
-  //                     this.quantity,
-  //                     true
-  //                   )
-  //                   .subscribe({
-  //                     next: (finalResponse) => {
-  //                       this.showProductCard = false;
-  //                       this.skuCode = '';
-  //                       this.snackBar.open(finalResponse.message, 'Close', {
-  //                         duration: 3000,
-  //                         verticalPosition: 'bottom',
-  //                         horizontalPosition: 'center',
-  //                       });
-  //                     },
-  //                     error: (error) => {
-  //                       console.error(
-  //                         'Error adding to cart after confirmation:',
-  //                         error
-  //                       );
-  //                       this.snackBar.open(
-  //                         'Error adding item to the cart.',
-  //                         'Close',
-  //                         {
-  //                           duration: 3000,
-  //                           verticalPosition: 'bottom',
-  //                           horizontalPosition: 'center',
-  //                           panelClass: ['error-snackbar'],
-  //                         }
-  //                       );
-  //                     },
-  //                   });
-  //               } else {
-  //                 console.log('User canceled the addition.');
-  //               }
-  //             });
-  //           } else {
-  //             this.showProductCard = false;
-  //             const updatedCount = currentCount + 1;
-  //             this.cartService.updateCartCount(updatedCount);
-  //             this.skuCode = '';
-  //             this.snackBar.open(response.message, 'Close', {
-  //               duration: 3000,
-  //               verticalPosition: 'bottom',
-  //               horizontalPosition: 'center',
-  //               panelClass: ['success-snackbar'],
-  //             });
-  //           }
-  //         },
-  //         error: (error) => {
-  //           console.error('Error adding to cart:', error);
-  //           this.snackBar.open(
-  //             'An error occurred while adding the product.',
-  //             'Close',
-  //             {
-  //               duration: 3000,
-  //               verticalPosition: 'bottom',
-  //               horizontalPosition: 'center',
-  //               panelClass: ['error-snackbar'],
-  //             }
-  //           );
-  //         },
-  //       });
-  //   });
-  // }
-
   addToCart() {
     if (!this.userInfo) {
       this.api.logout();
       return;
+    }
+
+    if (this.ratingPayload) {
+      this.api.saveOrUpdateRating(this.ratingPayload).subscribe({
+        next: (response) => {},
+        error: (error) => {},
+      });
     }
 
     let cartRequests: any[] = [];
@@ -442,12 +328,12 @@ export class HomePageComponent {
   }
 
   callCartApi(cartRequests: any[]) {
+    const currentCount = this.cartService.getCartCount();
     this.api
       .bulkAddToCart(this.userInfo.emailId, cartRequests, false)
       .subscribe({
         next: (response) => {
           if (!response.success) {
-            // Show confirmation dialog
             this.isLoading = false;
             this.confirmationMessage = response.message;
             const dialogRef = this.dialog.open(this.confirmDialog, {
@@ -461,6 +347,9 @@ export class HomePageComponent {
                   .bulkAddToCart(this.userInfo.emailId, cartRequests, true)
                   .subscribe({
                     next: (finalResponse) => {
+                      this.cartService.updateCartCount(
+                        currentCount + cartRequests.length
+                      );
                       this.isLoading = false;
                       this.showProductCard = false;
                       this.skuCode = '';
@@ -486,6 +375,9 @@ export class HomePageComponent {
               }
             });
           } else {
+            this.cartService.updateCartCount(
+              currentCount + cartRequests.length
+            );
             this.isLoading = false;
             this.showProductCard = false;
             this.skuCode = '';

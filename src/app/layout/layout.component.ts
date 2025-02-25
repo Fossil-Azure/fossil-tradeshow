@@ -8,7 +8,7 @@ import { CartserviceService } from '../../shared/CartService/cartservice.service
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.css']
+  styleUrls: ['./layout.component.css'],
 })
 export class LayoutComponent {
   isExpanded = false;
@@ -19,19 +19,24 @@ export class LayoutComponent {
     { name: 'Home', icon: 'home', route: '/tradeshow/home' },
     { name: 'My Orders', icon: 'receipt_long', route: '/tradeshow/my-orders' },
     { name: 'Profile', icon: 'person', route: '/tradeshow/profile' },
-    { name: 'Settings', icon: 'settings', route: '/tradeshow/settings' },
-    { name: 'Logout', icon: 'logout', route: '/tradeshow/logout' }
+    { name: 'Logout', icon: 'logout', route: '/login' },
   ];
   userInfo: any;
   userCurrency: any;
   badgeCount = 0;
   isLoading: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private router: Router, private api: ApiCallingService,
-    private loader: LoaderServiceService, private cartService: CartserviceService) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private router: Router,
+    private api: ApiCallingService,
+    private loader: LoaderServiceService,
+    private cartService: CartserviceService
+  ) {
     // Observe screen size changes using BreakpointObserver
-    this.breakpointObserver.observe([Breakpoints.Handset])
-      .subscribe(result => {
+    this.breakpointObserver
+      .observe([Breakpoints.Handset])
+      .subscribe((result) => {
         this.isMobile = result.matches;
         if (this.isMobile) {
           this.isExpanded = false; // Collapse sidenav on small screens
@@ -39,6 +44,7 @@ export class LayoutComponent {
         }
       });
 
+    this.cartService.fetchCart();
     const user = localStorage.getItem('user');
     if (user) {
       this.userInfo = JSON.parse(user);
@@ -57,8 +63,8 @@ export class LayoutComponent {
     this.isLoading = true;
     this.api.getCart(this.userInfo.emailId).subscribe({
       next: (response) => {
-        if(response) {
-          this.badgeCount = response.items.length
+        if (response) {
+          this.badgeCount = response.items.length;
           this.cartService.updateCartCount(this.badgeCount);
           this.isLoading = false;
         }
@@ -66,7 +72,7 @@ export class LayoutComponent {
       error: (error) => {
         console.error('Error fetching cart:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -88,6 +94,10 @@ export class LayoutComponent {
   }
 
   navigateTo(route: string): void {
-    this.router.navigate([route]);
+    if (route == '/login') {
+      this.api.logout();
+    } else {
+      this.router.navigate([route]);
+    }
   }
 }

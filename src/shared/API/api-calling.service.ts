@@ -16,6 +16,8 @@ export class ApiCallingService {
   private findProduct = `${this.baseUrl}/searchUniqueProduct`;
   private cart = `${this.baseUrl}/cart`;
   private order = `${this.baseUrl}/orders`;
+  private pass = `${this.baseUrl}/update-password`;
+  private rating = `${this.baseUrl}/product-rating`;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -117,7 +119,18 @@ export class ApiCallingService {
     return this.http.post(`${this.order}/place?confirm=${confirm}`, order);
   }
 
-  updateOrder(order: any): Observable<any> {
-    return this.http.put(`${this.order}/update/${order.id}`, order);
+  updateOrder(order: any, changes: any): Observable<any> {
+    return this.http.put(`${this.order}/update/${order.id}`, order, changes);
+  }
+
+  updatePassword(emailId: string, newPassword: string): Observable<any> {
+    return this.http.post(
+      `${this.pass}?email=${emailId}&newPassword=${newPassword}`,
+      {}
+    );
+  }
+
+  saveOrUpdateRating(ratingPayload: any): Observable<any> {
+    return this.http.post(`${this.rating}`, ratingPayload);
   }
 }

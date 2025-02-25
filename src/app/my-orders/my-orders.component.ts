@@ -3,6 +3,7 @@ import { ApiCallingService } from '../../shared/API/api-calling.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { CartserviceService } from '../../shared/CartService/cartservice.service';
 
 @Component({
   selector: 'app-my-orders',
@@ -29,8 +30,11 @@ export class MyOrdersComponent {
     private api: ApiCallingService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private router: Router
+    private cartService: CartserviceService
   ) {
+
+    this.cartService.fetchCart();
+    
     const user = localStorage.getItem('user');
     if (user) {
       this.userInfo = JSON.parse(user);
@@ -141,10 +145,24 @@ export class MyOrdersComponent {
 
   // Remove Item from Order
   removeItem(index: number) {
-    if (confirm('Are you sure you want to remove this item?')) {
-      this.selectedOrder.items.splice(index, 1);
-      this.updateTotals();
-    }
+    const dialogRef = this.dialog.open(this.deleteOrderPopUp, {
+      id: 'delete-order-dialog',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.selectedOrder.items.splice(index, 1);
+        this.updateTotals();
+        this.snackBar.open(`Item removed successfully`, 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center',
+          panelClass: ['success-snackbar'],
+        });
+      } else {
+        console.log('Delete Cancelled');
+      }
+    });
   }
 
   // Increase Quantity
@@ -180,12 +198,12 @@ export class MyOrdersComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.isLoading = true;
       if (result) {
-        this.api.updateOrder(this.selectedOrder).subscribe({
+        this.isLoading = true;
+        this.api.updateOrder(this.selectedOrder, this.changes).subscribe({
           next: (response) => {
-            this.backToOrders()
-            this.fetchOrders()
+            this.backToOrders();
+            this.fetchOrders();
             this.isLoading = false;
             this.snackBar.open(`Order Updated Successfully`, 'Close', {
               duration: 2000,
@@ -195,6 +213,7 @@ export class MyOrdersComponent {
             });
           },
           error: (error) => {
+            this.toggleEditMode(this.selectedOrder);
             this.isLoading = false;
             this.snackBar.open(`Something went wrong`, 'Close', {
               duration: 2000,
@@ -250,38 +269,44 @@ export class MyOrdersComponent {
   calculateDifferences() {
     this.changes = [];
 
-    // Compare items
-    this.selectedOrder.items.forEach((newItem: any, index: number) => {
-      const oldItem = this.orderCopy.items.find(
-        (item: any) => item.product.sku === newItem.product.sku
+    // Track all SKUs
+    const allSkus = new Set([
+      ...this.selectedOrder.items.map((item: any) => item.product.sku),
+      ...this.orderCopy.items.map((item: any) => item.product.sku),
+    ]);
+
+    allSkus.forEach((sku) => {
+      const newItem = this.selectedOrder.items.find(
+        (item: any) => item.product.sku === sku
       );
+      const oldItem = this.orderCopy.items.find(
+        (item: any) => item.product.sku === sku
+      );
+
+      let changeType = 'Unchanged';
+      let highlightClass = ''; // For color coding changes
 
       if (!oldItem) {
-        this.changes.push({
-          product: newItem.product.sku,
-          change: 'Added',
-        });
+        changeType = 'Added';
+        highlightClass = 'green'; // Green for added items
+      } else if (!newItem) {
+        changeType = 'Removed';
+        highlightClass = 'red'; // Red for removed items
       } else if (newItem.quantity !== oldItem.quantity) {
-        this.changes.push({
-          product: newItem.product.sku,
-          oldQuantity: oldItem.quantity,
-          newQuantity: newItem.quantity,
-          change: 'Updated',
-        });
+        changeType = 'Updated';
+        highlightClass = newItem.quantity > oldItem.quantity ? 'green' : 'red'; // Green for increase, Red for decrease
       }
-    });
 
-    // Detect removed items
-    this.orderCopy.items.forEach((oldItem: any) => {
-      const newItem = this.selectedOrder.items.find(
-        (item: any) => item.product.sku === oldItem.product.sku
-      );
-      if (!newItem) {
-        this.changes.push({
-          product: oldItem.product.productTitle,
-          change: 'Removed',
-        });
-      }
+      this.changes.push({
+        product: oldItem
+          ? oldItem.product.productTitle
+          : newItem.product.productTitle,
+        sku: sku,
+        oldQuantity: oldItem ? oldItem.quantity : 0,
+        newQuantity: newItem ? newItem.quantity : 0,
+        change: changeType,
+        highlightClass: highlightClass,
+      });
     });
   }
 
