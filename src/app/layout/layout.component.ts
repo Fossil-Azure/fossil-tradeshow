@@ -94,6 +94,7 @@ export class LayoutComponent {
   }
 
   navigateTo(route: string): void {
+    this.showMobileMenu = false
     if (route == '/login') {
       this.api.logout();
     } else {

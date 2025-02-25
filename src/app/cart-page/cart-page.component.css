@@ -4,6 +4,7 @@
   flex-direction: column;
   /* justify-content: space-between; */
   width: 100%;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -102,8 +103,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 5px;
-  font-size: 0.8rem;
+  gap: 2px;
+  font-size: 12px;
 }
 
 .quantity-control button {
@@ -121,9 +122,9 @@
   background-color: #007bff;
   color: white;
   border: none;
-  /* padding: 5px 10px; */
+  padding: 4px 8px;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1rem;
   border-radius: 4px;
 }
 
@@ -133,7 +134,7 @@
 
 .item-subtotal {
   font-weight: bold;
-  color: #333;
+  color: #000000;
   font-size: 1rem;
 }
 
@@ -256,7 +257,7 @@
   align-items: center;
   background-color: #f9f9f9;
   text-align: center;
-  height: 87vh;
+  height: 100%;
 }
 
 .empty-cart-card-content {
@@ -544,8 +545,12 @@
 
   .cart-items {
     margin-right: 0;
-    max-height: calc(100vh - 250px);
+    max-height: calc(100vh - 210px);
     overflow-y: auto;
+  }
+
+  .cart-items p {
+    font-size: 12px;
   }
 
   .cart-summary {
@@ -553,41 +558,29 @@
     align-items: stretch;
     text-align: center;
     padding: 15px;
-    width: 82%;
+    width: 80%;
   }
 
   .cart-summary p {
     font-size: 1rem;
-    /* Adjust font size */
     margin: 5px 0;
   }
 
   .checkout-button {
     width: 100%;
-    /* Full-width button */
     padding: 12px;
-    /* Adjust padding */
     font-size: 1rem;
-    /* Adjust font size */
     margin-top: 10px;
-    /* Add spacing above the button */
   }
 
   .item-details span {
     display: inline-block;
-    /* Ensures the text is treated as a block within its container */
     max-width: 100%;
-    /* Prevents the text from exceeding the width of its container */
     white-space: normal;
-    /* Allows the text to wrap onto the next line */
     overflow-wrap: break-word;
-    /* Breaks long words if necessary */
     word-wrap: break-word;
-    /* Ensures compatibility for older browsers */
     text-overflow: ellipsis;
-    /* Adds ellipsis for overflowing text (optional) */
     font-size: 0.8rem;
-    /* Adjust font size for better readability on smaller screens */
   }
 
   .checkout-button {
@@ -614,24 +607,48 @@
 
   .table-container {
     overflow-x: hidden;
-    /* Prevents horizontal scroll */
   }
 
   .cart-table {
     table-layout: fixed;
-    /* Forces table to resize */
     width: 100%;
   }
 
   .cart-table th,
   .cart-table td {
-    padding: 8px;
-    font-size: 14px;
+    padding: 4px;
+    font-size: 12px;
   }
 
-  /* Allow Header Text to Break into Two Lines */
   .cart-table th {
     word-break: break-word;
     text-align: center;
+  }
+
+  .dialog-content p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+
+  .dialog-title {
+    font-size: 18px !important;
+    font-weight: bold;
+  }
+
+  .cart-item {
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff;
+    border-radius: 5px;
+  }
+
+  .empty-cart-title {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+
+  .empty-cart-description {
+    font-size: 12px;
   }
 }

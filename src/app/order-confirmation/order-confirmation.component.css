@@ -22,9 +22,9 @@
 }
 
 .check-icon {
-  font-size: 80px;
-  height: 80px;
-  width: 80px;
+  font-size: 60px;
+  height: 60px;
+  width: 60px;
   color: #4caf50;
   animation: popUp 0.5s ease-in-out;
 }
@@ -42,7 +42,7 @@
 
 /* Title & Subtitle */
 .title {
-  font-size: 26px;
+  font-size: 22px;
   font-weight: bold;
   color: #333;
   margin-bottom: 10px;
@@ -50,9 +50,9 @@
 }
 
 .subtitle {
-  font-size: 16px;
+  font-size: 14px;
   color: #777;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -70,7 +70,7 @@
 /* Scrollable Order Items */
 .scrollable-items {
   flex-grow: 1;
-  max-height: 40vh;
+  max-height: calc(100vh - 200px);
   overflow-y: auto;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -194,8 +194,8 @@
 /* Responsive Design for Mobile */
 @media (max-width: 768px) {
   .order-confirmation-container {
-    height: auto;
-    padding: 15px;
+    height: calc(100% - 10px);
+    padding: 5px;
   }
 
   .check-icon {
@@ -205,11 +205,13 @@
   }
 
   .title {
-    font-size: 22px;
+    font-size: 20px;
+    margin-bottom: 0;
   }
 
   .subtitle {
-    font-size: 14px;
+    font-size: 12px;
+    margin-bottom: 5px;
   }
 
   .bottom-section {
@@ -227,10 +229,11 @@
     width: 50%;
     max-width: none;
     padding: 10px;
+    font-size: 14px;
   }
 
   .scrollable-items {
-    max-height: 25vh;
+    max-height: 100%;
     padding: 8px;
   }
 
@@ -245,6 +248,7 @@
   }
 
   .total-amount {
-    font-size: 16px;
+    font-size: 14px;
+    margin: 0;
   }
 }

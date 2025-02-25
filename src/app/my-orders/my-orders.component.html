@@ -3,7 +3,7 @@
 
 <!-- Order List View -->
 <div *ngIf="!selectedOrder; else orderDetailsTemplate">
-  <h4>My Orders</h4>
+  <span class="pageTitle">My Orders</span>
 
   <div *ngFor="let order of orders" class="order-card">
     <p><strong>Order ID:</strong> {{ order.id }}</p>
@@ -21,7 +21,15 @@
     </button>
   </div>
 
-  <p *ngIf="orders.length === 0" class="no-orders">No orders found.</p>
+  <div class="no-orders-container" *ngIf="orders.length === 0">
+    <img src="assets/no-order.png" alt="Empty Cart" class="no-order-image" />
+    <p class="no-orders-title">Your Order History is Empty!</p>
+    <p class="no-orders-text">
+      Looks like you haven't placed any orders yet. <br />
+      Start exploring our collection!
+    </p>
+    <button class="browse-btn" routerLink="/shop">Shop Now</button>
+  </div>
 </div>
 
 <!-- Order Details View -->
@@ -63,7 +71,7 @@
     </div>
 
     <p>
-      <strong>Order Details - {{ selectedOrder.id }}</strong>
+      <strong>Order ID - {{ selectedOrder.id }}</strong>
     </p>
     <p>
       <strong>Order Date:</strong>
@@ -86,7 +94,7 @@
         />
 
         <div class="item-info">
-          <p>
+          <p *ngIf="!isMobile">
             <strong>{{ item.product.productTitle }}</strong>
           </p>
           <p><strong>SKU:</strong> {{ item.product.sku }}</p>
@@ -105,7 +113,7 @@
             <p><strong>Quantity:</strong> {{ item.quantity }}</p>
           </ng-template>
           <p>
-            <strong>Subtotal:</strong> {{ currencySymbol }}
+            <strong>Subtotal:</strong><br> {{ currencySymbol }}
             {{
               getProductPrice(item.product) * item.quantity | number : "1.2-2"
             }}

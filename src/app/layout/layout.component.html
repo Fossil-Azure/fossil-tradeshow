@@ -60,7 +60,7 @@
         </button>
       </div>
       <div class="menu-content">
-        <div class="mobile-menu-item" *ngFor="let item of menuItems">
+        <div class="mobile-menu-item" *ngFor="let item of menuItems" (click)="navigateTo(item.route)">
           <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
           <span class="mobile-menu-text">{{ item.name }}</span>
         </div>

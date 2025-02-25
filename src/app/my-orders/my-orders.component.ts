@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CartserviceService } from '../../shared/CartService/cartservice.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-my-orders',
@@ -25,13 +26,21 @@ export class MyOrdersComponent {
 
   @ViewChild('saveUpdatedOrder')
   saveUpdatedOrder!: TemplateRef<any>;
+  isMobile: boolean = false;
 
   constructor(
     private api: ApiCallingService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private cartService: CartserviceService
+    private cartService: CartserviceService,
+    private router: Router,
+    private breakpointObserver: BreakpointObserver,
   ) {
+    this.breakpointObserver
+          .observe([Breakpoints.Handset])
+          .subscribe((result) => {
+            this.isMobile = result.matches;
+          });
     this.cartService.fetchCart();
 
     const user = localStorage.getItem('user');
@@ -312,5 +321,9 @@ export class MyOrdersComponent {
   closeEditOrderDialog(confirmed: boolean): void {
     this.dialog.closeAll();
     this.dialog.getDialogById('update-order-dialog')?.close(confirmed);
+  }
+
+  navigateToShop() {
+    this.router.navigate(['/tradeshow/home']);
   }
 }

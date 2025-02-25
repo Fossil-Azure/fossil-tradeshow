@@ -58,15 +58,15 @@
         <img [src]="item.image" alt="Product Image" />
       </div>
       <div class="item-details">
-        <span title="{{ item.name }}">{{ item.name }}</span>
-        <p class="item-sku">SKU: {{ item.sku }}</p>
-        <p class="item-brand">Brand: {{ item.brand }}</p>
+        <!-- <span title="{{ item.name }}">{{ item.name }}</span> -->
+        <p class="item-sku"><strong>SKU:</strong> {{ item.sku }}</p>
+        <p class="item-brand"><strong>Brand:</strong> {{ item.brand }}</p>
         <p class="item-mrp">
-          MSRP/MRP: {{ currencySymbol }} {{ item.price | number : "1.2-2" }}
+          <strong>MSRP/MRP:</strong> {{ currencySymbol }} {{ item.price | number : "1.2-2" }}
         </p>
         <div class="item-actions">
           <div class="mobile-quantity-control">
-            <label>Quantity</label>
+            <strong><label>Quantity</label></strong>
             <button (click)="decreaseQuantity(item)" class="btn">-</button>
             <input
               type="text"
@@ -77,7 +77,7 @@
             <button (click)="increaseQuantity(item)" class="btn">+</button>
           </div>
           <p class="item-subtotal">
-            Subtotal: {{ currencySymbol }}
+          <strong>Subtotal:</strong> {{ currencySymbol }}
             {{ item.quantity * item.price | number : "1.2-2" }}
           </p>
         </div>
@@ -106,7 +106,7 @@
   </div>
 
   <div *ngIf="isMobile && cartItems.length > 0" class="cart-summary">
-    <p style="font-weight: bold; font-size: 1.5rem">
+    <p style="font-weight: bold; font-size: 1.05rem">
       Total Price: {{ currencySymbol }} {{ totalPrice | number : "1.2-2" }}
     </p>
     <button
@@ -141,10 +141,10 @@
 
 <ng-template #placeOrder>
   <div class="order-dialog-container">
-    <h2 mat-dialog-title class="dialog-title">
+    <span mat-dialog-title class="dialog-title">
       <mat-icon class="check-icon">shopping_cart</mat-icon>
       Confirm Your Order
-    </h2>
+    </span>
 
     <mat-dialog-content class="dialog-content">
       <p>You are about to place an order for:</p>
