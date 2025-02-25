@@ -57,30 +57,22 @@ export class WelcomeComponent {
     this.api.updatePassword(payload.email, payload.newPassword).subscribe({
       next: (response: any) => {
         console.log(response);
-        this.snackBar.open(
-          'Password Reset Successfully.',
-          'Close',
-          {
-            duration: 3000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'center'
-          }
-        );
+        this.snackBar.open('Password Reset Successfully.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center',
+        });
         this.api.logout();
         this.isLoading = false;
       },
       error: (error) => {
         this.isLoading = false;
-        console.log(error)
-        this.snackBar.open(
-          'Something went wrong.',
-          'Close',
-          {
-            duration: 3000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'center'
-          }
-        );
+        console.log(error);
+        this.snackBar.open('Something went wrong.', 'Close', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center',
+        });
         this.errorMessage = error.error || 'Failed to update password!';
       },
     });

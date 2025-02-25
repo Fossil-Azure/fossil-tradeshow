@@ -1,202 +1,211 @@
 /* Container styles */
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    max-height: 100vh;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  max-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
 }
 
 /* Login card styling */
 .login-card {
-    position: relative;
-    z-index: 2;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    animation: fadeIn 1s ease;
-    margin: 10px;
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  animation: fadeIn 1s ease;
+  margin: 10px;
 }
 
 .company-logo {
-    max-width: 130px;
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 15px;
+  max-width: 130px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 15px;
 }
 
 mat-card-title h2 {
-    font-size: 24px;
-    color: #333;
-    text-align: center;
-    margin: 0;
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+  margin: 0;
 }
 
 /* Animation effect */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Form field and button styling */
 mat-form-field.full-width {
-    width: 100%;
-    margin-top: 10px;
+  width: 100%;
+  margin-top: 10px;
 }
 
 button.full-width {
-    width: 100%;
-    margin-top: 20px;
-    background: linear-gradient(135deg, #563d7c, #7a5fa8);
-    color: #fff;
-    font-weight: bold;
-    padding: 12px;
-    border-radius: 25px;
-    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 2px 20px rgba(88, 56, 143, 0);
-    position: relative;
-    overflow: hidden;
+  width: 100%;
+  margin-top: 20px;
+  background: linear-gradient(135deg, #563d7c, #7a5fa8);
+  color: #fff;
+  font-weight: bold;
+  padding: 12px;
+  border-radius: 25px;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 2px 20px rgba(88, 56, 143, 0);
+  position: relative;
+  overflow: hidden;
 }
 
 button.full-width:hover {
-    background: linear-gradient(135deg, #7a5fa8, #563d7c);
-    /* Color flip effect */
-    box-shadow: 0 6px 15px rgba(88, 56, 143, 0.5), 0 4px 30px rgba(88, 56, 143, 0.2);
-    transform: translateY(-3px);
+  background: linear-gradient(135deg, #7a5fa8, #563d7c);
+  /* Color flip effect */
+  box-shadow: 0 6px 15px rgba(88, 56, 143, 0.5),
+    0 4px 30px rgba(88, 56, 143, 0.2);
+  transform: translateY(-3px);
 }
 
 button.full-width:active {
-    transform: translateY(2px);
-    /* Press-down effect */
-    box-shadow: 0 4px 10px rgba(88, 56, 143, 0.3);
+  transform: translateY(2px);
+  /* Press-down effect */
+  box-shadow: 0 4px 10px rgba(88, 56, 143, 0.3);
 }
 
 /* Add glowing animation on hover */
 button.full-width::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 60%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    transform: rotate(45deg);
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.2),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: rotate(45deg);
 }
 
 button.full-width:hover::before {
-    opacity: 0.5;
-    /* Glowing effect */
+  opacity: 0.5;
+  /* Glowing effect */
 }
 
 /* Add ripple effect on click */
 button.full-width::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s, transform 0.4s;
-    transform: scale(10);
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.3),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s, transform 0.4s;
+  transform: scale(10);
 }
 
 button.full-width:active::after {
-    opacity: 0.2;
-    transform: scale(0);
-    /* Ripple effect */
+  opacity: 0.2;
+  transform: scale(0);
+  /* Ripple effect */
 }
 
 /* Forgot password link */
 .forgot-password {
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-    color: #333;
-    font-size: 14px;
-    opacity: 0.8;
-    transition: opacity 0.3s;
+  display: block;
+  text-align: center;
+  margin-top: 10px;
+  color: #333;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: opacity 0.3s;
 }
 
 .forgot-password:hover {
-    opacity: 1;
+  opacity: 1;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .login-card {
-        padding: 15px;
-        width: 90%;
-    }
+  .login-card {
+    padding: 15px;
+    width: 90%;
+  }
 
-    .company-logo {
-        max-width: 120px;
-    }
+  .company-logo {
+    max-width: 120px;
+  }
 
-    mat-card-title h2 {
-        font-size: 22px;
-    }
+  mat-card-title h2 {
+    font-size: 22px;
+  }
 
-    button.full-width {
-        padding: 10px;
-        font-size: 16px;
-    }
+  button.full-width {
+    padding: 10px;
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 500px) {
-    .login-card {
-        width: 100%;
-        padding: 10px;
-    }
+  .login-card {
+    width: 100%;
+    padding: 10px;
+  }
 
-    .company-logo {
-        max-width: 100px;
-    }
+  .company-logo {
+    max-width: 100px;
+  }
 
-    mat-card-title h2 {
-        font-size: 20px;
-    }
+  mat-card-title h2 {
+    font-size: 20px;
+  }
 
-    mat-form-field.full-width {
-        margin-top: 8px;
-    }
+  mat-form-field.full-width {
+    margin-top: 8px;
+  }
 
-    button.full-width {
-        padding: 8px;
-        font-size: 14px;
-    }
+  button.full-width {
+    padding: 8px;
+    font-size: 14px;
+  }
 
-    .forgot-password {
-        font-size: 12px;
-    }
+  .forgot-password {
+    font-size: 12px;
+  }
 }
 
 /* Material Form Field and Icon Adjustments */
 mat-form-field {
-    position: relative;
+  position: relative;
 }
 
 mat-icon {
-    cursor: pointer;
-    color: #757575;
+  cursor: pointer;
+  color: #757575;
 }
 
 mat-icon:hover {
-    color: #333;
+  color: #333;
 }

@@ -15,11 +15,7 @@
     <div class="scrollable-items">
       <ul>
         <li *ngFor="let item of orderDetails">
-          <img
-            [src]="item.image"
-            class="product-img"
-            alt="{{ item.name }}"
-          />
+          <img [src]="item.image" class="product-img" alt="{{ item.name }}" />
           <div class="item-details">
             <p>
               <strong>{{ item.name }}</strong>
@@ -39,7 +35,8 @@
   <!-- Fixed Bottom Section -->
   <div class="bottom-section">
     <p class="total-amount">
-      Total: <strong>{{ currencySymbol }} {{ totalPrice | number : "1.2-2" }}</strong>
+      Total:
+      <strong>{{ currencySymbol }} {{ totalPrice | number : "1.2-2" }}</strong>
     </p>
     <div class="button-container">
       <button class="back-home-button" (click)="continueShopping()">

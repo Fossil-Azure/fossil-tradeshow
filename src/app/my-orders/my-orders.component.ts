@@ -32,9 +32,8 @@ export class MyOrdersComponent {
     private snackBar: MatSnackBar,
     private cartService: CartserviceService
   ) {
-
     this.cartService.fetchCart();
-    
+
     const user = localStorage.getItem('user');
     if (user) {
       this.userInfo = JSON.parse(user);
