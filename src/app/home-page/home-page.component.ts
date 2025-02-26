@@ -34,7 +34,16 @@ export class HomePageComponent {
   subTotal = 0;
   hoveredRating = 0;
   isMobile = false;
-  allowedFormats = [BarcodeFormat.QR_CODE, BarcodeFormat.CODE_128];
+  allowedFormats = [
+    BarcodeFormat.QR_CODE,
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.EAN_13,
+    BarcodeFormat.EAN_8,
+    BarcodeFormat.UPC_A,
+    BarcodeFormat.UPC_E,
+    BarcodeFormat.CODE_39,
+    BarcodeFormat.DATA_MATRIX,
+  ];
   showProductCard = false;
   notFound = false;
   skuControl = new FormControl('');
@@ -128,7 +137,8 @@ export class HomePageComponent {
 
   // Handle QR code result
   handleQrCodeResult(result: string) {
-    this.skuCode = result.toUpperCase(); // Fill the input field with scanned text
+    this.skuCode = result.toUpperCase();
+    this.performAction();
     this.closeScanner();
   }
 

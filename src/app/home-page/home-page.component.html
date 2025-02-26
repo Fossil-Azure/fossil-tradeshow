@@ -213,27 +213,27 @@
     </div>
 
     <!-- Row 2 -->
-    <div class="grid-item-mobile">
+    <div class="grid-item-mobile product-data">
       <label>Brand</label>
       <span>{{ productDetails.brand }}</span>
     </div>
-    <div class="grid-item-mobile">
+    <div class="grid-item-mobile product-data">
       <label>Season</label>
       <span>{{ productDetails.season }}</span>
     </div>
 
     <!-- Row 3 -->
-    <div class="grid-item-mobile">
+    <div class="grid-item-mobile product-data">
       <label>Platform</label>
       <span>{{ productDetails.platform }}</span>
     </div>
-    <div class="grid-item-mobile">
+    <div class="grid-item-mobile product-data">
       <label>MRP / MSRP</label>
       <span>{{ currencySymbol }} {{ dynamicPrice | number : "1.2-2" }}</span>
     </div>
 
     <!-- Row 4 -->
-    <div *ngIf="!showSize" class="grid-item-mobile">
+    <div *ngIf="!showSize" class="grid-item-mobile product-data">
       <label class="desktop-label">Quantity</label>
       <div class="quantity-wrapper">
         <button (click)="decrement()" class="btn">-</button>
@@ -241,34 +241,39 @@
           type="text"
           [(ngModel)]="quantity"
           (input)="validateQuantity()"
-          class="mobile-quantity-input"
         />
         <button (click)="increment()" class="btn">+</button>
       </div>
     </div>
 
     <!-- Show sizes and quantity input when showSize is true -->
-    <div *ngIf="showSize" class="grid-item-mobile">
-      <div
-        *ngFor="let size of productDetails.sizes; let i = index"
-        class="size-container"
-      >
-        <label class="desktop-label"
-          ><strong>{{ productDetails.sku }}_{{ size }}</strong></label
+    <div
+      *ngIf="showSize"
+      class="grid-item-mobile product-data"
+      style="grid-column: span 2"
+    >
+      <div class="size-selection">
+        <div
+          *ngFor="let size of productDetails.sizes; let i = index"
+          class="size-container"
         >
-        <div class="quantity-wrapper">
-          <button (click)="decrementSizeQuantity(i)" class="btn">-</button>
-          <input
-            type="text"
-            [(ngModel)]="sizeQuantities[i]"
-            (input)="validateSizeQuantity(i)"
-            class="quantity-input"
-          />
-          <button (click)="incrementSizeQuantity(i)" class="btn">+</button>
+          <label class="desktop-label"
+            ><strong>{{ productDetails.sku }}_{{ size }}</strong></label
+          >
+          <div class="quantity-wrapper">
+            <button (click)="decrementSizeQuantity(i)" class="btn">-</button>
+            <input
+              type="text"
+              [(ngModel)]="sizeQuantities[i]"
+              (input)="validateSizeQuantity(i)"
+              class="quantity-input"
+            />
+            <button (click)="incrementSizeQuantity(i)" class="btn">+</button>
+          </div>
         </div>
       </div>
     </div>
-    <div class="grid-item-mobile mobile-subtotal">
+    <div class="grid-item-mobile product-data" [ngStyle]="showSize ? {'grid-column': 'span 2'} : {}">
       <label>Sub Total</label>
       <span>{{ currencySymbol }} {{ subTotal | number : "1.2-2" }}</span>
     </div>

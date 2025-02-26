@@ -112,21 +112,17 @@ body {
   font-size: 40px;
   width: 40px;
   height: 40px;
-  /* Set size for the stars */
   color: #d3d3d3;
-  /* Default star color */
   cursor: pointer;
   transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .stars mat-icon.filled {
   color: #ffc107;
-  /* Gold color for filled stars */
 }
 
 .stars mat-icon:hover {
   transform: scale(1.2);
-  /* Slight scaling effect on hover */
 }
 
 .cart-button {
@@ -270,11 +266,6 @@ mat-form-field {
   gap: 10px;
 }
 
-.product-image-mobile {
-  height: 150px;
-  width: 150px;
-}
-
 .product-rating-mobile {
   display: flex;
   gap: 5px;
@@ -290,29 +281,6 @@ mat-form-field {
   word-wrap: break-word;
 }
 
-/* Form Fields */
-.grid-item-mobile {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  width: 100%;
-  margin-top: 10px;
-}
-
-.grid-item-mobile label {
-  font-size: 14px;
-  color: #666;
-}
-
-.grid-item-mobile input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .desktop-input {
   padding: 8px;
   font-size: 14px;
@@ -323,15 +291,6 @@ mat-form-field {
 .quantity-input {
   border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-.mobile-quantity-input {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  width: 20px;
-  box-sizing: border-box;
 }
 
 .desktop-label {
@@ -515,7 +474,6 @@ mat-form-field {
   flex-direction: column;
   align-items: center;
   background: #fff;
-  border: 1px solid #ddd;
   padding: 5px;
   border-radius: 8px;
   text-align: center;
@@ -529,14 +487,6 @@ mat-form-field {
   margin-top: 10px;
 }
 
-.mobile-subtotal {
-  text-align: center;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 10px;
-  border-radius: 8px;
-}
-
 .size-selection {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -548,31 +498,32 @@ mat-form-field {
 
 /* Responsive Adjustments */
 @media screen and (max-width: 768px) {
+  .stars {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
   .stars mat-icon {
     box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.1);
     font-size: 24px;
     width: 24px;
     height: 24px;
-    /* Set size for the stars */
     color: #d3d3d3;
-    /* Default star color */
     cursor: pointer;
     transition: color 0.3s ease, transform 0.2s ease;
   }
 
   .stars mat-icon.filled {
     color: #ffc107;
-    /* Gold color for filled stars */
   }
 
   .stars mat-icon:hover {
-    transform: scale(1.2);
-    /* Slight scaling effect on hover */
+    transform: scale(1);
   }
 
   .product-grid {
     grid-template-columns: 1fr;
-    /* Single column for mobile */
   }
 
   .cart-button {
@@ -585,7 +536,7 @@ mat-form-field {
     display: flex;
     align-items: center;
     height: 32px;
-    width: 80%;
+    width: 100%;
   }
 
   .quantity-wrapper button {
@@ -594,7 +545,7 @@ mat-form-field {
 
   .quantity-wrapper input {
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
   }
 
   /* Add to Cart Button */
@@ -606,13 +557,35 @@ mat-form-field {
 
   .size-selection {
     grid-template-columns: repeat(2, 1fr);
-    /* 2 per row for mobile */
   }
 }
 
 @media (max-width: 480px) {
   .grid-item-mobile {
-    grid-template-columns: repeat(1, 1fr);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    margin-top: 5px;
+    padding: 5px;
+  }
+
+  .grid-item-mobile label {
+    font-size: 10px;
+    color: #666;
+  }
+
+  .grid-item-mobile input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .grid-item-mobile span {
+    font-size: 12px;
+    font-weight: bold;
   }
 
   .form-control mat-label {
@@ -631,6 +604,46 @@ mat-form-field {
 
   .no-product-description,
   .prompt-description {
+    font-size: 12px;
+  }
+
+  .product-image-mobile {
+    height: 120px;
+    width: 120px;
+  }
+
+  .product-title {
+    align-items: flex-start;
+    font-size: 12px;
+    padding: 5px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+  }
+
+  .product-data {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+  }
+
+  .size-selection {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    margin-top: 5px;
+  }
+
+  .size-container {
+    align-items: center;
+    background: #fff;
+    padding: 5px;
+    text-align: center;
+  }
+
+  .quantity-wrapper {
+    width: 100%;
+  }
+
+  .quantity-wrapper input {
+    text-align: center;
     font-size: 12px;
   }
 }
