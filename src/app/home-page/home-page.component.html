@@ -121,7 +121,7 @@
         </div>
 
         <!-- Row 3 -->
-        <div *ngIf="!showSize" class="grid-item" style="grid-column: span 2">
+        <div *ngIf="!showSize" class="grid-item">
           <label class="desktop-label">Quantity</label>
           <div class="quantity-wrapper desktop-input">
             <button (click)="decrement()" class="btn">-</button>
@@ -143,7 +143,7 @@
               class="size-container"
             >
               <label class="desktop-label"
-                >{{ productDetails.sku }}_{{ size }}</label
+                ><strong>{{ productDetails.sku }}_{{ size }}</strong></label
               >
               <div class="quantity-wrapper">
                 <button (click)="decrementSizeQuantity(i)" class="btn">
@@ -163,7 +163,7 @@
           </div>
         </div>
 
-        <div class="grid-item">
+        <div class="grid-item" [ngStyle]="showSize ? {'grid-column': 'span 3'} : {'grid-column': 'span 2'}">
           <label class="desktop-label sub-total">Sub Total</label>
           <span class="detail-value"
             >{{ currencySymbol }} {{ subTotal | number : "1.2-2" }}</span
