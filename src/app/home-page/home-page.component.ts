@@ -56,6 +56,7 @@ export class HomePageComponent {
   showSize: boolean = false;
   sizeQuantities: number[] = [];
   ratingPayload!: any;
+  productRating: any = { averageRating: 0, ratings: [] };
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -157,6 +158,7 @@ export class HomePageComponent {
     this.showProductCard = false;
     this.userRating = 0;
     this.ratingPayload = null;
+    this.productRating = null;
   }
 
   // Action to perform when text is entered or QR is scanned
@@ -165,9 +167,19 @@ export class HomePageComponent {
     this.quantity = 1;
     this.userRating = 0;
     this.ratingPayload = null;
+    this.productRating = null;
     if (this.skuControl.valid) {
       this.notFound = false;
       this.showSize = false;
+      this.api.getAvgRating(this.skuCode.toUpperCase()).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.productRating = response;
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
       this.api.getProduct(this.skuCode.toUpperCase()).subscribe({
         next: (response) => {
           this.productDetails = response;

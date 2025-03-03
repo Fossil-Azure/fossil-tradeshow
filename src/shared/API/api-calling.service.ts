@@ -133,4 +133,8 @@ export class ApiCallingService {
   saveOrUpdateRating(ratingPayload: any): Observable<any> {
     return this.http.post(`${this.rating}`, ratingPayload);
   }
+
+  getAvgRating(skucode: any): Observable<any> {
+    return this.http.get(`${this.baseUrl}/avg-rating/${skucode}`);
+  }
 }
