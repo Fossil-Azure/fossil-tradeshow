@@ -137,4 +137,8 @@ export class ApiCallingService {
   getAvgRating(skucode: any): Observable<any> {
     return this.http.get(`${this.baseUrl}/avg-rating/${skucode}`);
   }
+
+  getUserDetails(emailId: any): Observable<any> {
+    return this.http.get(`${this.baseUrl}/getUser/${emailId}`);
+  }
 }

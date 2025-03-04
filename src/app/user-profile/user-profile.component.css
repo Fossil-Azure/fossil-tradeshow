@@ -1,0 +1,211 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: linear-gradient(to top, #2488de, #4facfe, #00f2fe);
+}
+
+.profile-card {
+  width: 400px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #4facfe;
+}
+
+.email {
+  color: #555;
+  font-size: 14px;
+}
+
+.profile-info p {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 8px 0;
+}
+
+.profile-info mat-icon {
+  margin: 8px;
+  color: #4facfe;
+}
+
+.resetPasswordBtn {
+  background: linear-gradient(to left, #e5ce4c, #fed84f, #fed800);
+  color: black;
+}
+
+.dialog-container {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: white;
+}
+
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.full-width {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.dialog-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.cancel-btn {
+  background: #ff5757;
+  font-weight: bold;
+  padding: 15px 10px;
+  border: none;
+  transition: 0.3s;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  transform: scale(1.1);
+}
+
+.change-btn {
+  background: #00aeffb1;
+  color: white;
+  font-weight: bold;
+  transition: 0.3s;
+  padding: 15px 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.change-btn:hover {
+  transform: scale(1.1);
+}
+
+.success-message {
+  text-align: center;
+  color: #2ecc71;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.error-message {
+  text-align: center;
+  color: #e74c3c;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-card {
+    width: 250px;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    background: #ffffff;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .profile-header {
+    margin-bottom: 10px;
+  }
+
+  .profile-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .email {
+    font-size: 12px;
+  }
+
+  .profile-info p {
+    font-size: 12px;
+    font-weight: 300;
+    margin: 5px 0;
+  }
+
+  .profile-info mat-icon {
+    margin: 5px;
+    color: #4facfe;
+  }
+
+  .dialog-title {
+    font-size: 16px;
+  }
+  
+  .dialog-content {
+    padding: 5px;
+  }
+  
+  .cancel-btn {
+    padding: 10px 5px;
+  }
+  
+  .cancel-btn:hover {
+    transform: none;
+  }
+  
+  .change-btn {
+    padding: 10px 5px;
+  }
+  
+  .change-btn:hover {
+    transform: none;
+  }
+  
+  .error-message {
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}

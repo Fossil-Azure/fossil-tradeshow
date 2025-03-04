@@ -7,6 +7,7 @@ import { CartPageComponent } from './cart-page/cart-page.component';
 import { OrderConfirmationComponent } from './order-confirmation/order-confirmation.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
@@ -20,6 +21,7 @@ export const routes: Routes = [
       { path: 'cart', component: CartPageComponent },
       { path: 'order-confirmation', component: OrderConfirmationComponent },
       { path: 'my-orders', component: MyOrdersComponent },
+      {path: 'user-profile', component: UserProfileComponent}
     ],
     canActivate: [AuthGuard],
   },

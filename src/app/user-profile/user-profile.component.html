@@ -1,0 +1,82 @@
+<div class="profile-container">
+  <mat-card class="profile-card" @fadeIn>
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading" class="loading-container">
+      <p>Loading user details...</p>
+    </div>
+
+    <!-- Profile Content -->
+    <div *ngIf="!isLoading && user">
+      <div class="profile-header">
+        <img
+          src="assets/profile.png"
+          alt="User Avatar"
+          class="profile-avatar"
+        />
+        <h4>{{ user?.nameOfUser }}</h4>
+        <p class="email">{{ user?.emailId }}</p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="profile-info">
+        <p>
+          <mat-icon>business</mat-icon> Company:
+          <span>{{ user?.company }}</span>
+        </p>
+        <p>
+          <mat-icon>category</mat-icon> Category Access:
+          <span>{{ user?.categoryAccess }}</span>
+        </p>
+        <p>
+          <mat-icon>label</mat-icon> Brand Access:
+          <span>{{ user?.brandAccess }}</span>
+        </p>
+        <p>
+          <mat-icon>public</mat-icon> Country Access:
+          <span>{{ user?.countryAccess }}</span>
+        </p>
+        <p>
+          <mat-icon>attach_money</mat-icon> Currency:
+          <span>{{ user?.currency }}</span>
+        </p>
+        <p>
+          <mat-icon>access_time</mat-icon> Last Login:
+          <span>{{ user?.lastLogin | date : "short" }}</span>
+        </p>
+      </div>
+    </div>
+    <button mat-button class="resetPasswordBtn" (click)="openPasswordDialog()">
+      Reset Password<mat-icon>help_outline</mat-icon>
+    </button>
+  </mat-card>
+</div>
+
+<ng-template #passwordDialog>
+  <div class="dialog-container">
+    <h2 mat-dialog-title class="dialog-title">🔑 Reset Password</h2>
+
+    <div class="dialog-content">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>New Password</mat-label>
+        <input matInput type="password" [(ngModel)]="oldPassword" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" [(ngModel)]="newPassword" required />
+      </mat-form-field>
+    </div>
+
+    <mat-dialog-actions class="dialog-actions">
+      <button class="cancel-btn" (click)="closeDialog(false)">
+        Cancel
+      </button>
+      <button class="change-btn" (click)="closeDialog(true)">
+        🔄 Change Password
+      </button>
+    </mat-dialog-actions>
+
+    <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+  </div>
+</ng-template>

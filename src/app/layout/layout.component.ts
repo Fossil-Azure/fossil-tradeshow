@@ -18,7 +18,7 @@ export class LayoutComponent {
   menuItems = [
     { name: 'Home', icon: 'home', route: '/tradeshow/home' },
     { name: 'My Orders', icon: 'receipt_long', route: '/tradeshow/my-orders' },
-    { name: 'Profile', icon: 'person', route: '/tradeshow/profile' },
+    { name: 'Profile', icon: 'person', route: '/tradeshow/user-profile' },
     { name: 'Logout', icon: 'logout', route: '/login' },
   ];
   userInfo: any;
