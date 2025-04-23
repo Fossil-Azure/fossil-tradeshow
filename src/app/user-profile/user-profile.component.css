@@ -3,7 +3,6 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  background: linear-gradient(to top, #2488de, #4facfe, #00f2fe);
 }
 
 .profile-card {
@@ -82,32 +81,13 @@
 }
 
 .cancel-btn {
-  background: #ff5757;
-  font-weight: bold;
-  padding: 15px 10px;
-  border: none;
-  transition: 0.3s;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.cancel-btn:hover {
-  transform: scale(1.1);
+  background: linear-gradient(to left, #e54c4c, #f5492e, #fe1900);
+  color: black;
 }
 
 .change-btn {
-  background: #00aeffb1;
-  color: white;
-  font-weight: bold;
-  transition: 0.3s;
-  padding: 15px 10px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.change-btn:hover {
-  transform: scale(1.1);
+  background: linear-gradient(to left, #5be54c, #5df94c, #35d624);
+  color: black;
 }
 
 .success-message {

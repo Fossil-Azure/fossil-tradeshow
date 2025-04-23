@@ -42,6 +42,7 @@ export class CartPageComponent {
   @ViewChild('duplicateDialog')
   duplicateDialog!: TemplateRef<any>;
   isLoading: boolean = false;
+  quantityError: boolean = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -196,29 +197,30 @@ export class CartPageComponent {
   }
 
   proceedToCheckout(): void {
-    this.api.getCart(this.userInfo.emailId).subscribe({
-      next: (response) => {
-        this.items = response;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-    const dialogRef = this.dialog.open(this.placeOrder, {
-      id: 'place-order-dialog',
-      width: '500px',
-    });
+    if(!this.quantityError) {
+      this.api.getCart(this.userInfo.emailId).subscribe({
+        next: (response) => {
+          this.items = response;
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
+      const dialogRef = this.dialog.open(this.placeOrder, {
+        id: 'place-order-dialog',
+        width: '500px',
+      });
+    } else {
+      this.snackBar.open('Please fix the highlighted quantity issues before Placing the Order', 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
+        panelClass: ['error-snackbar'],
+      });
+    }    
   }
 
   validateQuantity(item: any): void {
-    const value = parseInt(item.quantity, 10);
-
-    if (!value || value < 1) {
-      item.quantity = 1;
-    } else {
-      item.quantity = value;
-    }
-
     this.updateQuantity(item, item.quantity);
   }
 
@@ -252,9 +254,16 @@ export class CartPageComponent {
     return parseFloat(total.toFixed(2));
   }
 
+  itemHasQuantityError(item: any): boolean {
+    const qty = Number(item.quantity);
+    return item.quantity == null || isNaN(qty) || qty < 1;
+  }
+
   updateQuantity(item: any, newQuantity: number): void {
-    if (newQuantity < 1) {
-      this.snackBar.open('Quantity cannot be less than 1.', 'Close', {
+    this.quantityError = false;
+    if (newQuantity == null || isNaN(newQuantity) || newQuantity < 1) {
+      this.quantityError = true;
+      this.snackBar.open('Please enter a valid Quantity', 'Close', {
         duration: 3000,
         verticalPosition: 'bottom',
         horizontalPosition: 'center',
@@ -262,14 +271,13 @@ export class CartPageComponent {
       });
       return;
     }
-    this.isLoading = true;
+
     this.api
       .updateCartItemQuantity(this.userInfo.emailId, item.sku, newQuantity)
       .subscribe({
         next: (response) => {
           // Update the local cart item quantity
           item.quantity = newQuantity;
-          this.isLoading = false;
           this.snackBar.open(
             `Quantity updated to ${newQuantity} for SKU ${item.sku}.`,
             'Close',
@@ -283,7 +291,6 @@ export class CartPageComponent {
         },
         error: (error) => {
           console.error('Error updating quantity:', error);
-          this.isLoading = false;
           this.snackBar.open('Failed to update quantity.', 'Close', {
             duration: 3000,
             verticalPosition: 'bottom',

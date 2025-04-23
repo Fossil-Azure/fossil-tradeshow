@@ -1,5 +1,4 @@
 <app-loader [isLoading]="isLoading"></app-loader>
-
 <body>
   <div class="imageDiv">
     <img src="assets/Banner.jpg" alt="Tradeshow Banner" class="banner" />
@@ -46,134 +45,270 @@
     </button>
   </div>
 
-  <div *ngIf="notFound" class="error-card">
-    <div class="product-card-content">
-      <img
-        src="assets/not_found.png"
-        alt="No Product Found"
-        class="no-product-image"
-      />
-      <h2 class="no-product-title">Oops! No Product Found</h2>
-      <p class="no-product-description">
-        We couldn't find the product you were looking for. Try scanning the
-        barcode again or enter a valid SKU.
-      </p>
+  <div class="section-wrapper">
+    <div *ngIf="isLoadingSection" class="loader-overlay">
+      <div class="spinner"></div>
     </div>
-  </div>
-
-  <div *ngIf="!notFound && !showProductCard" class="prompt-card">
-    <div class="prompt-card-content">
-      <img src="assets/seo.png" alt="Enter SKU" class="prompt-image" />
-      <h2 class="prompt-title">Search for a Product</h2>
-      <p class="prompt-description">
-        Enter the SKU or scan the barcode to find your product quickly.
-      </p>
-    </div>
-  </div>
-
-  <div *ngIf="showProductCard && !isMobile" class="product-card">
-    <!-- Product Image Section -->
-    <div class="product-image">
-      <img [src]="productDetails.imageUrl" alt="Product Image" />
-      <!-- Rating Section -->
-      <div class="product-rating">
-        <div class="stars">
-          <mat-icon
-            *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
-            (click)="setRating(i + 1)"
-            (mouseover)="hoverRating(i + 1)"
-            (mouseleave)="hoverRating(0)"
-            [class.filled]="i + 1 <= (hoveredRating || userRating)"
-          >
-            star
-          </mat-icon>
-        </div>
-        <span *ngIf="productRating.ratings.length > 0" style="font-size: 12px;">Avg Rating : {{productRating?.averageRating}} ({{productRating?.ratings.length}} Rating)</span>
+    <div *ngIf="notFound" class="error-card">
+      <div class="product-card-content">
+        <img
+          src="assets/not_found.png"
+          alt="No Product Found"
+          class="no-product-image"
+        />
+        <h2 class="no-product-title">Oops! No Product Found</h2>
+        <p class="no-product-description">
+          We couldn't find the product you were looking for. Try scanning the
+          barcode again or enter a valid SKU.
+        </p>
       </div>
     </div>
 
-    <!-- Desktop Layout -->
-    <div *ngIf="!isMobile" class="product-details">
-      <div class="details-grid">
-        <!-- Row 1 -->
-        <div class="grid-item" style="grid-column: span 2">
-          <label class="desktop-label">Product Title</label>
-          <span class="detail-value">{{ productDetails.productTitle }}</span>
-        </div>
-        <div class="grid-item">
-          <label class="desktop-label">Brand</label>
-          <span class="detail-value">{{ productDetails.brand }}</span>
-        </div>
+    <div *ngIf="!notFound && !showProductCard" class="prompt-card">
+      <div class="prompt-card-content">
+        <img src="assets/seo.png" alt="Enter SKU" class="prompt-image" />
+        <h2 class="prompt-title">Search for a Product</h2>
+        <p class="prompt-description">
+          Enter the SKU or scan the barcode to find your product quickly.
+        </p>
+      </div>
+    </div>
 
-        <!-- Row 2 -->
-        <div class="grid-item">
-          <label class="desktop-label">Season</label>
-          <span class="detail-value">{{ productDetails.season }}</span>
-        </div>
-        <div class="grid-item">
-          <label class="desktop-label">Platform</label>
-          <span class="detail-value">{{ productDetails.platform }}</span>
-        </div>
-        <div class="grid-item">
-          <label class="desktop-label">MSRP / MRP</label>
-          <span class="detail-value"
-            >{{ currencySymbol }} {{ dynamicPrice | number : "1.2-2" }}</span
+    <div *ngIf="showProductCard && !isMobile" class="product-card">
+      <!-- Product Image Section -->
+      <div class="product-image">
+        <img [src]="productDetails.imageUrl" alt="Product Image" />
+        <!-- Rating Section -->
+        <div class="product-rating">
+          <div class="stars">
+            <mat-icon
+              *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
+              (click)="setRating(i + 1)"
+              (mouseover)="hoverRating(i + 1)"
+              (mouseleave)="hoverRating(0)"
+              [class.filled]="i + 1 <= (hoveredRating || userRating)"
+            >
+              star
+            </mat-icon>
+          </div>
+          <span *ngIf="productRating.ratings.length > 0" style="font-size: 12px"
+            >Avg Rating : {{ productRating?.averageRating }} ({{
+              productRating?.ratings.length
+            }}
+            Rating)</span
           >
         </div>
+      </div>
 
-        <!-- Row 3 -->
-        <div *ngIf="!showSize" class="grid-item">
-          <label class="desktop-label">Quantity</label>
-          <div class="quantity-wrapper desktop-input">
-            <button (click)="decrement()" class="btn">-</button>
-            <input
-              type="text"
-              [(ngModel)]="quantity"
-              (input)="validateQuantity()"
-              class="quantity-input"
-            />
-            <button (click)="increment()" class="btn">+</button>
+      <!-- Desktop Layout -->
+      <div *ngIf="!isMobile" class="product-details">
+        <div class="details-grid">
+          <!-- Row 1 -->
+          <div class="grid-item" style="grid-column: span 2">
+            <label class="desktop-label">Product Title</label>
+            <span class="detail-value">{{ productDetails.productTitle }}</span>
           </div>
-        </div>
+          <div class="grid-item">
+            <label class="desktop-label">Brand</label>
+            <span class="detail-value">{{ productDetails.brand }}</span>
+          </div>
 
-        <!-- Size Selection -->
-        <div *ngIf="showSize" class="grid-item" style="grid-column: span 3">
-          <div class="size-selection">
-            <div
-              *ngFor="let size of productDetails.sizes; let i = index"
-              class="size-container"
+          <!-- Row 2 -->
+          <div class="grid-item">
+            <label class="desktop-label">Season</label>
+            <span class="detail-value">{{ productDetails.season }}</span>
+          </div>
+          <div class="grid-item">
+            <label class="desktop-label">Platform</label>
+            <span class="detail-value">{{ productDetails.platform }}</span>
+          </div>
+          <div class="grid-item">
+            <label class="desktop-label">MSRP / MRP</label>
+            <span class="detail-value"
+              >{{ currencySymbol }} {{ dynamicPrice | number : "1.2-2" }}</span
             >
-              <label class="desktop-label"
-                ><strong>{{ productDetails.sku }}_{{ size }}</strong></label
+          </div>
+
+          <!-- Row 3 -->
+          <div *ngIf="!showSize" class="grid-item">
+            <label class="desktop-label">Quantity</label>
+            <div class="quantity-wrapper desktop-input">
+              <button (click)="decrement()" class="btn">-</button>
+              <input
+                type="text"
+                [(ngModel)]="quantity"
+                (input)="validateQuantity()"
+                [ngClass]="{ 'error-border': itemHasQuantityError() }"
+                class="quantity-input"
+              />
+              <button (click)="increment()" class="btn">+</button>
+            </div>
+          </div>
+
+          <!-- Size Selection -->
+          <div *ngIf="showSize" class="grid-item" style="grid-column: span 3">
+            <div class="size-selection">
+              <div
+                *ngFor="let size of productDetails.sizes; let i = index"
+                class="size-container"
               >
-              <div class="quantity-wrapper">
-                <button (click)="decrementSizeQuantity(i)" class="btn">
-                  -
-                </button>
-                <input
-                  type="text"
-                  [(ngModel)]="sizeQuantities[i]"
-                  (input)="validateSizeQuantity(i)"
-                  class="quantity-input"
-                />
-                <button (click)="incrementSizeQuantity(i)" class="btn">
-                  +
-                </button>
+                <label class="desktop-label"
+                  ><strong>{{ productDetails.sku }}_{{ size }}</strong></label
+                >
+                <div class="quantity-wrapper">
+                  <button (click)="decrementSizeQuantity(i)" class="btn">
+                    -
+                  </button>
+                  <input
+                    type="text"
+                    [(ngModel)]="sizeQuantities[i]"
+                    (input)="validateSizeQuantity(i)"
+                    class="quantity-input"
+                  />
+                  <button (click)="incrementSizeQuantity(i)" class="btn">
+                    +
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+
+          <div
+            class="grid-item"
+            [ngStyle]="
+              showSize
+                ? { 'grid-column': 'span 3' }
+                : { 'grid-column': 'span 2' }
+            "
+          >
+            <label class="desktop-label sub-total">Sub Total</label>
+            <span class="detail-value"
+              >{{ currencySymbol }} {{ subTotal | number : "1.2-2" }}</span
+            >
+          </div>
         </div>
 
-        <div class="grid-item" [ngStyle]="showSize ? {'grid-column': 'span 3'} : {'grid-column': 'span 2'}">
-          <label class="desktop-label sub-total">Sub Total</label>
-          <span class="detail-value"
-            >{{ currencySymbol }} {{ subTotal | number : "1.2-2" }}</span
+        <!-- Add to Cart Button -->
+        <div class="cart-button">
+          <button
+            mat-raised-button
+            color="primary"
+            class="cartButton"
+            (click)="addToCart()"
           >
+            <mat-icon>shopping_cart</mat-icon>Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Layout -->
+    <div *ngIf="showProductCard && isMobile" class="product-grid">
+      <!-- Row 1 -->
+      <div class="grid-item-mobile image-rating">
+        <img
+          [src]="productDetails.imageUrl"
+          alt="Product Image"
+          class="product-image-mobile"
+        />
+        <div class="product-rating-mobile">
+          <div class="stars">
+            <mat-icon
+              *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
+              (click)="setRating(i + 1)"
+              (mouseover)="hoverRating(i + 1)"
+              (mouseleave)="hoverRating(0)"
+              [class.filled]="i + 1 <= (hoveredRating || userRating)"
+            >
+              star
+            </mat-icon>
+          </div>
+        </div>
+        <span
+          *ngIf="productRating.ratings.length > 0"
+          style="font-size: 8px; text-align: center"
+          >Avg Rating : {{ productRating?.averageRating }} ({{
+            productRating?.ratings.length
+          }}
+          Rating)</span
+        >
+      </div>
+      <div class="grid-item-mobile product-title">
+        <span>{{ productDetails.productTitle }}</span>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="grid-item-mobile product-data">
+        <label>Brand</label>
+        <span>{{ productDetails.brand }}</span>
+      </div>
+      <div class="grid-item-mobile product-data">
+        <label>Season</label>
+        <span>{{ productDetails.season }}</span>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="grid-item-mobile product-data">
+        <label>Platform</label>
+        <span>{{ productDetails.platform }}</span>
+      </div>
+      <div class="grid-item-mobile product-data">
+        <label>MRP / MSRP</label>
+        <span>{{ currencySymbol }} {{ dynamicPrice | number : "1.2-2" }}</span>
+      </div>
+
+      <!-- Row 4 -->
+      <div *ngIf="!showSize" class="grid-item-mobile product-data">
+        <label class="desktop-label">Quantity</label>
+        <div class="quantity-wrapper">
+          <button (click)="decrement()" class="btn">-</button>
+          <input
+            type="text"
+            [(ngModel)]="quantity"
+            (input)="validateQuantity()"
+            [ngClass]="{ 'error-border': itemHasQuantityError() }"
+          />
+          <button (click)="increment()" class="btn">+</button>
         </div>
       </div>
 
-      <!-- Add to Cart Button -->
-      <div class="cart-button">
+      <!-- Show sizes and quantity input when showSize is true -->
+      <div
+        *ngIf="showSize"
+        class="grid-item-mobile product-data"
+        style="grid-column: span 2"
+      >
+        <div class="size-selection">
+          <div
+            *ngFor="let size of productDetails.sizes; let i = index"
+            class="size-container"
+          >
+            <label class="desktop-label"
+              ><strong>{{ productDetails.sku }}_{{ size }}</strong></label
+            >
+            <div class="quantity-wrapper">
+              <button (click)="decrementSizeQuantity(i)" class="btn">-</button>
+              <input
+                type="text"
+                [(ngModel)]="sizeQuantities[i]"
+                (input)="validateSizeQuantity(i)"
+                class="quantity-input"
+              />
+              <button (click)="incrementSizeQuantity(i)" class="btn">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="grid-item-mobile product-data"
+        [ngStyle]="showSize ? { 'grid-column': 'span 2' } : {}"
+      >
+        <label>Sub Total</label>
+        <span>{{ currencySymbol }} {{ subTotal | number : "1.2-2" }}</span>
+      </div>
+
+      <!-- Row 5 -->
+      <div class="grid-item-mobile cart-button" colspan="2">
         <button
           mat-raised-button
           color="primary"
@@ -183,113 +318,6 @@
           <mat-icon>shopping_cart</mat-icon>Add to Cart
         </button>
       </div>
-    </div>
-  </div>
-
-  <!-- Mobile Layout -->
-  <div *ngIf="showProductCard && isMobile" class="product-grid">
-    <!-- Row 1 -->
-    <div class="grid-item-mobile image-rating">
-      <img
-        [src]="productDetails.imageUrl"
-        alt="Product Image"
-        class="product-image-mobile"
-      />
-      <div class="product-rating-mobile">
-        <div class="stars">
-          <mat-icon
-            *ngFor="let star of [1, 2, 3, 4, 5]; let i = index"
-            (click)="setRating(i + 1)"
-            (mouseover)="hoverRating(i + 1)"
-            (mouseleave)="hoverRating(0)"
-            [class.filled]="i + 1 <= (hoveredRating || userRating)"
-          >
-            star
-          </mat-icon>
-        </div>
-      </div>
-      <span *ngIf="productRating.ratings.length > 0" style="font-size: 8px; text-align: center;">Avg Rating : {{productRating?.averageRating}} ({{productRating?.ratings.length}} Rating)</span>
-    </div>
-    <div class="grid-item-mobile product-title">
-      <span>{{ productDetails.productTitle }}</span>
-    </div>
-
-    <!-- Row 2 -->
-    <div class="grid-item-mobile product-data">
-      <label>Brand</label>
-      <span>{{ productDetails.brand }}</span>
-    </div>
-    <div class="grid-item-mobile product-data">
-      <label>Season</label>
-      <span>{{ productDetails.season }}</span>
-    </div>
-
-    <!-- Row 3 -->
-    <div class="grid-item-mobile product-data">
-      <label>Platform</label>
-      <span>{{ productDetails.platform }}</span>
-    </div>
-    <div class="grid-item-mobile product-data">
-      <label>MRP / MSRP</label>
-      <span>{{ currencySymbol }} {{ dynamicPrice | number : "1.2-2" }}</span>
-    </div>
-
-    <!-- Row 4 -->
-    <div *ngIf="!showSize" class="grid-item-mobile product-data">
-      <label class="desktop-label">Quantity</label>
-      <div class="quantity-wrapper">
-        <button (click)="decrement()" class="btn">-</button>
-        <input
-          type="text"
-          [(ngModel)]="quantity"
-          (input)="validateQuantity()"
-        />
-        <button (click)="increment()" class="btn">+</button>
-      </div>
-    </div>
-
-    <!-- Show sizes and quantity input when showSize is true -->
-    <div
-      *ngIf="showSize"
-      class="grid-item-mobile product-data"
-      style="grid-column: span 2"
-    >
-      <div class="size-selection">
-        <div
-          *ngFor="let size of productDetails.sizes; let i = index"
-          class="size-container"
-        >
-          <label class="desktop-label"
-            ><strong>{{ productDetails.sku }}_{{ size }}</strong></label
-          >
-          <div class="quantity-wrapper">
-            <button (click)="decrementSizeQuantity(i)" class="btn">-</button>
-            <input
-              type="text"
-              [(ngModel)]="sizeQuantities[i]"
-              (input)="validateSizeQuantity(i)"
-              class="quantity-input"
-            />
-            <button (click)="incrementSizeQuantity(i)" class="btn">+</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="grid-item-mobile product-data" [ngStyle]="showSize ? {'grid-column': 'span 2'} : {}">
-      <label>Sub Total</label>
-      <span>{{ currencySymbol }} {{ subTotal | number : "1.2-2" }}</span>
-    </div>
-
-    <!-- Row 5 -->
-    <div class="grid-item-mobile cart-button" colspan="2">
-      <button
-        mat-raised-button
-        color="primary"
-        class="cartButton"
-        (click)="addToCart()"
-      >
-        <mat-icon>shopping_cart</mat-icon>Add to Cart
-      </button>
     </div>
   </div>
 </body>

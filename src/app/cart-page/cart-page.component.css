@@ -484,6 +484,11 @@
   color: #333;
 }
 
+.error-border {
+  border-color: red !important;
+  box-shadow: 0 0 5px red;
+}
+
 .cart-table tfoot .total-row {
   background-color: #cfcfcf;
   color: white;

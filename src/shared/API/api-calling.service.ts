@@ -9,8 +9,8 @@ import { environment } from '../../environment/environment.prod';
   providedIn: 'root',
 })
 export class ApiCallingService {
-  // private baseUrl = 'http://localhost:8080';
-  private baseUrl = environment.apiUrl;
+  private baseUrl = 'http://localhost:8080';
+  // private baseUrl = environment.apiUrl;
 
   private loginUrl = `${this.baseUrl}/api/auth/login`;
   private findProduct = `${this.baseUrl}/searchUniqueProduct`;

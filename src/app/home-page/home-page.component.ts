@@ -57,6 +57,8 @@ export class HomePageComponent {
   sizeQuantities: number[] = [];
   ratingPayload!: any;
   productRating: any = { averageRating: 0, ratings: [] };
+  quantityError: boolean = false;
+  isLoadingSection: boolean = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -163,7 +165,7 @@ export class HomePageComponent {
 
   // Action to perform when text is entered or QR is scanned
   performAction(): void {
-    this.isLoading = true;
+    this.isLoadingSection = true;
     this.quantity = 1;
     this.userRating = 0;
     this.ratingPayload = null;
@@ -196,25 +198,27 @@ export class HomePageComponent {
           this.subTotal = price * this.quantity;
           this.notFound = false;
           this.showProductCard = true;
-          this.isLoading = false;
+          this.isLoadingSection = false;
         },
         error: (error) => {
           console.log(error);
           this.notFound = true;
           this.showProductCard = false;
-          this.isLoading = false;
+          this.isLoadingSection = false;
         },
       });
     }
   }
 
   increment(): void {
+    this.quantityError = false;
     this.quantity++;
     const price = this.getProductPrice();
     this.subTotal = price * this.quantity;
   }
 
   decrement(): void {
+    this.quantityError = false;
     if (this.quantity > 1) {
       this.quantity--;
       const price = this.getProductPrice();
@@ -223,15 +227,24 @@ export class HomePageComponent {
   }
 
   validateQuantity(): void {
-    const value = parseInt(this.quantity, 10);
-
-    if (isNaN(value) || value < 1) {
-      this.quantity = 1;
-    } else {
-      this.quantity = value;
+    this.quantityError = false;
+    if (this.quantity == null || isNaN(this.quantity) || this.quantity < 1) {
+      this.quantityError = true;
+      this.snackBar.open('Please enter a valid Quantity', 'Close', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
+        panelClass: ['error-snackbar'],
+      });
+      return;
     }
     const price = this.getProductPrice();
     this.subTotal = price * this.quantity;
+  }
+
+  itemHasQuantityError(): boolean {
+    const qty = Number(this.quantity);
+    return this.quantity == null || isNaN(qty) || qty < 1;
   }
 
   // Size-wise Quantity Handlers
@@ -286,6 +299,13 @@ export class HomePageComponent {
       productSku: this.skuCode,
       userId: this.userInfo.emailId,
     };
+
+    if (this.ratingPayload) {
+      this.api.saveOrUpdateRating(this.ratingPayload).subscribe({
+        next: (response) => {},
+        error: (error) => {},
+      });
+    }
   }
 
   hoverRating(rating: number): void {
@@ -298,11 +318,19 @@ export class HomePageComponent {
       return;
     }
 
-    if (this.ratingPayload) {
-      this.api.saveOrUpdateRating(this.ratingPayload).subscribe({
-        next: (response) => {},
-        error: (error) => {},
-      });
+    if (this.quantityError) {
+      this.snackBar.open(
+        'Please fix the highlighted quantity issues before Placing the Order',
+        'Close',
+        {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center',
+          panelClass: ['error-snackbar'],
+        }
+      );
+
+      return;
     }
 
     let cartRequests: any[] = [];
@@ -346,6 +374,7 @@ export class HomePageComponent {
       );
       return;
     }
+
     this.callCartApi(cartRequests);
   }
 

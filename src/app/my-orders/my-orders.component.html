@@ -113,7 +113,8 @@
             <p><strong>Quantity:</strong> {{ item.quantity }}</p>
           </ng-template>
           <p>
-            <strong>Subtotal:</strong><br> {{ currencySymbol }}
+            <strong>Subtotal:</strong><br />
+            {{ currencySymbol }}
             {{
               getProductPrice(item.product) * item.quantity | number : "1.2-2"
             }}
@@ -163,9 +164,7 @@
         <thead>
           <tr>
             <th>Product</th>
-            <th *ngIf="hasUpdatedChanges()">Old Quantity</th>
             <th *ngIf="hasUpdatedChanges()">New Quantity</th>
-            <th>Change</th>
           </tr>
         </thead>
         <tbody>
@@ -173,9 +172,6 @@
             <td>{{ change.product }}</td>
 
             <!-- Updated Items: Show old and new quantity -->
-            <td *ngIf="change.change === 'Updated'">
-              {{ change.oldQuantity }}
-            </td>
             <td
               *ngIf="change.change === 'Updated'"
               [ngClass]="{
@@ -184,32 +180,6 @@
               }"
             >
               {{ change.newQuantity }}
-            </td>
-
-            <!-- Unchanged Items: Span across columns -->
-            <td
-              *ngIf="change.change === 'Unchanged'"
-              colspan="2"
-              class="unchanged"
-            >
-              Unchanged
-            </td>
-
-            <!-- Removed Items: Span across columns, show old quantity as 'Removed' -->
-            <td *ngIf="change.change === 'Removed'" colspan="2" class="removed">
-              Removed (Old Quantity: {{ change.oldQuantity }})
-            </td>
-
-            <td>
-              <span
-                [ngClass]="{
-                  added: change.change === 'Added',
-                  updated: change.change === 'Updated',
-                  removed: change.change === 'Removed'
-                }"
-              >
-                {{ change.change }}
-              </span>
             </td>
           </tr>
         </tbody>

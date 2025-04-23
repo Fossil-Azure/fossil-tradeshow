@@ -37,6 +37,7 @@
             type="text"
             [(ngModel)]="item.quantity"
             (input)="validateQuantity(item)"
+            [ngClass]="{ 'error-border': itemHasQuantityError(item) }"
             class="quantity-input"
           />
           <button (click)="increaseQuantity(item)" class="btn">+</button>
@@ -72,6 +73,7 @@
               type="text"
               [(ngModel)]="item.quantity"
               (input)="validateQuantity(item)"
+              [ngClass]="{ 'error-border': itemHasQuantityError(item) }"
               class="quantity-input"
             />
             <button (click)="increaseQuantity(item)" class="btn">+</button>
